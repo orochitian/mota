@@ -1,0 +1,62 @@
+body{
+    background-color: #eee;
+    padding-top: 20px;
+}
+#result{
+    display: block;
+    width: 100%;
+    height: 30px;
+    height: 0px;
+    border: none;
+}
+.switch-wrap{
+    text-align: center;
+}
+.switch{
+    margin: 0 20px;
+    display: inline-block;
+    color: #19be6b;
+    font-size: 14px;
+}
+.collapse, .get-map{
+    width: 700px;
+    float: left;
+    margin-left: 50px;
+    margin-bottom: 20px;
+}
+.map{
+    float: right;
+    margin-right: 50px;
+    width: 364px;
+    height: 364px;
+    background: url("../src/images/grid.png");
+    border: 6px solid transparent;
+    border-image: url("../src/images/border.png") 6 6 round;
+    user-select: none;
+}
+.grid{
+    float: left;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    color: rgba(255, 255, 255, .8);
+}
+.grid:hover{
+    cursor: pointer;
+    background-color: rgba(255, 0, 0, .5);
+}
+.grid:active{
+    cursor: default;
+}
+.icon{
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+}
+.icon.active{
+    transform: scale(1.1);
+    border: 2px solid #19be6b;
+}

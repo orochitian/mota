@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>地图编辑器</title>
+    <link href="https://cdn.bootcss.com/iview/3.5.1/styles/iview.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/iview/3.5.1/iview.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+    <input v-model="JSON.stringify(map)" id="result" ref="result" />
+
+    <div class="map">
+        <div class="grid" v-for="index in 121" @click="place($event, index-1)">{{index-1}}</div>
+    </div>
+    <Collapse v-model="collapseOpen" class="collapse">
+        <Panel name="building">
+            建筑物
+            <div slot="content">
+                <img class="icon" shape="square" v-for="item in builds" @click="check(item, builds)" :src="item.src" :class="{active: item.active}" />
+            </div>
+        </Panel>
+        <Panel name="item">
+            物品
+            <div slot="content">
+                <img class="icon" shape="square" v-for="item in items" @click="check(item, items)" :src="item.src" :class="{active: item.active}" />
+            </div>
+        </Panel>
+        <Panel name="monster">
+            怪物
+            <div slot="content">
+                <img class="icon" shape="square" v-for="item in monsters" @click="check(item, monsters)" :src="item.src" :class="{active: item.active}" />
+                <div class="switch-wrap">
+                    <span class="switch">
+                        事件：
+                        <i-switch v-model="hasEvent"></i-switch>
+                    </span>
+                        <span class="switch">
+                        开门：
+                        <i-switch v-model="openGate"></i-switch>
+                    </span>
+                </div>
+            </div>
+        </Panel>
+        <Panel name="npc">
+            NPC
+            <div slot="content">
+                <img class="icon" shape="square" v-for="item in npcs" @click="check(item, npcs)" :src="item.src" :class="{active: item.active}" />
+            </div>
+        </Panel>
+        <Panel name="other">
+            其他
+            <div slot="content">
+                <Row :gutter="12">
+                    <i-col span="24">
+                        <i-input v-model.number="map.index" placeholder="0 - 50层">
+                            <span slot="prepend">当前楼层：</span>
+                        </i-input>
+                    </i-col>
+                </Row>
+                <Row :gutter="12" style="margin-top: 10px;">
+                    <i-col span="12">
+                        <i-input v-model.number="map.down" placeholder="0 - 120">
+                            <img class="icon" slot="prepend" shape="square" src="./images/builds/up.png" style="margin: 0; width: 20px; height: 20px" />
+                        </i-input>
+                    </i-col>
+                    <i-col span="12">
+                        <i-input v-model.number="map.up" placeholder="0 - 120">
+                            <img class="icon" slot="prepend" shape="square" src="./images/builds/down.png" style="margin: 0; width: 20px; height: 20px" />
+                        </i-input>
+                    </i-col>
+                </Row>
+            </div>
+        </Panel>
+    </Collapse>
+
+    <i-button type="success" long class="get-map" @click="getMap">生成地图</i-button>
+
+    <Modal v-model="eventModal" title="添加事件" @on-ok="eventOk">
+        <i-input v-model="eventID" placeholder="ID编号">
+            <span slot="prepend">事件ID：</span>
+        </i-input>
+    </Modal>
+    <Modal v-model="openModal" title="添加要开启的门" @on-ok="openOk">
+        <i-select v-model="open.type" style="margin-bottom: 20px;">
+            <i-option value="yellowgate">黄门</i-option>
+            <i-option value="bluegate">蓝门</i-option>
+            <i-option value="redgate">红门</i-option>
+            <i-option value="greengate">绿门</i-option>
+            <i-option value="rail">铁门</i-option>
+        </i-select>
+        <!--<i-input v-model="open.type" placeholder="例如：yellowgate" style="margin-bottom: 20px;">-->
+            <!--<span slot="prepend">门的类型：</span>-->
+        <!--</i-input>-->
+        <i-input v-model.trim="open.monsters" placeholder="数字集合用空格隔开。例如：4 8" style="margin-bottom: 20px;">
+            <span slot="prepend">干掉的位置集合：</span>
+        </i-input>
+        <i-input v-model.trim="open.gates" placeholder="数字集合用空格隔开。例如：20 30 40">
+            <span slot="prepend">开门的位置集合：</span>
+        </i-input>
+    </Modal>
+
+</div>
+
+<script src="data/items.js"></script>
+<script src="data/builds.js"></script>
+<script src="data/monsters.js"></script>
+<script src="data/npcs.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>

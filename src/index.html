@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Mota</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+</head>
+<body>
+    <!-- 展示 -->
+    <div id="show">
+        <!-- 游戏层 -->
+        <canvas id="game" width="704" height="704"></canvas>
+        <!-- 静态层 -->
+        <canvas id="static" width="704" height="704"></canvas>
+        <!-- 活动层 -->
+        <canvas id="active" width="704" height="704"></canvas>
+        <!-- 对话层 -->
+        <div id="dialog"></div>
+        <!-- 消息层 -->
+        <div id="message">战斗胜利，获得50金币</div>
+    </div>
+
+    <!-- 控制、面板 -->
+    <div id="panel">
+        <button id="refresh">刷新</button>
+        <button id="save">存档</button>
+        <button id="load">读档</button>
+        <div id="control">
+            <canvas class="control-btn" id="up" width="200" height="200"></canvas>
+            <canvas class="control-btn" id="down" width="200" height="200"></canvas>
+            <canvas class="control-btn" id="left" width="200" height="200"></canvas>
+            <canvas class="control-btn" id="right" width="200" height="200"></canvas>
+        </div>
+    </div>
+</body>
+</html>

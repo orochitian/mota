@@ -1,0 +1,24 @@
+{
+  "name": "mota",
+  "version": "1.0.0",
+  "description": "a game",
+  "main": "main",
+  "scripts": {},
+  "keywords": [
+    "game"
+  ],
+  "author": "ryan lee",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.0.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {}
+}
