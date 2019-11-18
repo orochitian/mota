@@ -6,7 +6,7 @@ body {
     user-select: none;
 }
 #game, #control{
-    /*opacity: 0;*/
+    opacity: 0;
 }
 #show{
     position: relative;

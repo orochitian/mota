@@ -1,5 +1,6 @@
 import {ctx, StaticCtx, ActiveCtx, grid} from './Global'
 import source from './Source'
+import './FindPath'
 
 let running = false;
 
@@ -12,10 +13,9 @@ let messageAnimation = oMessage.animate([
     {opacity: 1},
     {opacity: 0}
 ], {
-    duration: 1500
+    duration: 1000
 });
 messageAnimation.cancel();
-
 
 export default {
     //  渲染地图
@@ -209,5 +209,5 @@ export default {
     fightEnd() {
         StaticCtx.clearRect(0, 0, 352, 352);
         ActiveCtx.clearRect(0, 0, 352, 352);
-    }
+    },
 }
