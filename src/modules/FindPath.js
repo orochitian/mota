@@ -1,7 +1,7 @@
-const map = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+const maps = [
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -14,11 +14,21 @@ const map = [
 
 function getArea(n) {
     if( n % 11 === 0 ) {
-        return [n-11, n+1, n+11].filter(num => num >= 0);
+        if( n < 11 ) {
+            return [n+1, n+11].filter(num => num >= 0 && maps[num] !== 1);
+        } else if( n > 109 ) {
+            return [n-11, n+1].filter(num => num >= 0 && maps[num] !== 1);
+        }
+        return [n-11, n+1, n+11].filter(num => num >= 0 && maps[num] !== 1);
     } else if( n % 11 === 10 ) {
-        return [n-1, n-11, n+11].filter(num => num >= 0);
+        if( n < 11 ) {
+            return [n-1, n+11].filter(num => num >= 0 && maps[num] !== 1);
+        } else if( n > 109 ) {
+            return [n-11, n-1].filter(num => num >= 0 && maps[num] !== 1);
+        }
+        return [n-1, n-11, n+11].filter(num => num >= 0 && maps[num] !== 1);
     }
-    return [n-1, n-11, n+1, n+11].filter(num => num >= 0);
+    return [n-1, n-11, n+1, n+11].filter(num => num >= 0 && maps[num] !== 1);
 }
 
 //  自动寻路
@@ -27,7 +37,7 @@ function autoPath(start, end) {
     let closeList = [];
     let s = start;
     let g = 0;
-    let path = [[s, 1], [s, 11]];
+    let map = []
 
     openList.push(s);
 
@@ -35,30 +45,43 @@ function autoPath(start, end) {
         if( openList.length < 1 ) {
             console.log('搜索结束');
         } else {
+            //  未检测待检测坐标
             g = openList.shift();
+            closeList.push(g);
             let area = getArea(g);
 
             for( let i=0; i<area.length; i++ ) {
-                //  判断当前坐标的四周是否被检测过，没有检测过的加入待检测列表
-                if( area[i] === end ) {
+                if( !openList.includes(area[i]) && !closeList.includes(area[i]) ) {
+                    openList.push(area[i]);
+                    map.push({value: area[i], parent: g});
+                }
+                if( g === end ) {
                     return;
                 }
-                if( !openList.includes(area[i]) && !closeList.includes(area[i]) ) {
-                    for( let j=0; j<path.length; j++ ) {
-                        if( path[j].includes(g) ) {
-                            path[j].push(area[i]);
-                        }
-                    }
-                    openList.push(area[i]);
-                }
             }
-            //  将当前坐标加入已检测列表
-            closeList.push(g);
             loop();
         }
     }
     loop();
+    let path = [];
+    let target = end;
+    function getPath() {
+        for( let i=0; i<map.length; i++ ) {
+            if( map[i].value === target ) {
+                if( map[i].value === start ) {
+                    return;
+                } else {
+                    if( map[i].value !== end ) {
+                        path.unshift(map[i].value);
+                    }
+                    target = map[i].parent;
+                    getPath();
+                }
+            }
+        }
+    }
+    getPath();
     console.log(path);
 }
 
-autoPath(0, 5)
+autoPath(0, 14)
