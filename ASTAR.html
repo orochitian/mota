@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            background: #ccc;
+        }
+
+        #map {
+            width: 720px;
+            margin: 50px auto;
+            background-color: #fff;
+        }
+
+        .grid {
+            float: left;
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            margin: 1px;
+            color: #666;
+            transition: .3s;
+            text-align: center;
+            line-height: 30px;
+            /*overflow: auto;*/
+        }
+        .grid p{
+            margin: 0;
+            font-size: 10px;
+        }
+        .start {
+            background-color: rgb(69, 137, 148);
+        }
+        .end {
+            background: rgb(255, 94, 72);
+        }
+
+        .disabled {
+            background: #333;
+        }
+
+        .active {
+            background: rgb(250, 227, 113);
+        }
+    </style>
+</head>
+<body>
+
+<div id="map">
+
+</div>
+
+<script>
+
+    let oMap = document.getElementById('map');
+
+    const maps = [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]
+
+    let start = null;
+    let end = null;
+    maps.forEach((n, index) => {
+        var grid = document.createElement('span');
+        if (n === 1) {
+            grid.className = 'grid disabled';
+        } else if (n === 2) {
+            grid.className = 'grid end';
+        } else {
+            grid.className = 'grid';
+        }
+        grid.index = index;
+        oMap.appendChild(grid);
+
+
+        grid.onclick = function () {
+            if( start === null && end === null ) {
+                document.querySelectorAll('.grid').forEach(grid => {
+                    grid.classList.remove('active');
+                });
+                start = index;
+                this.classList.add('start');
+            } else if( start !== null && end === null ) {
+                this.classList.add('end');
+                end = index;
+                let relation = astar(start, end);
+                if( !relation ) {
+                    console.log('无法找到目标');
+                    return;
+                }
+                let grids = document.getElementsByClassName('grid');
+                relation.forEach((item, i) => {
+                    // grids[item.v].innerHTML = `<p>f: ${item.f.f}</p><p>g: ${item.f.g}</p><p>h: ${item.f.h}</p>`
+                    grids[item.v].innerHTML = `x`
+                });
+                let path = getPath(relation, end);
+                // relation.forEach((item, i) => {
+                //     // grids[item.v].innerHTML = `<p>f: ${item.f.f}</p><p>g: ${item.f.g}</p><p>h: ${item.f.h}</p>`
+                //     grids[item.v].innerHTML = `x`
+                // });
+                if (path.length < 1) {
+                    return;
+                }
+
+                let times = 0;
+                let timmer = null;
+                timmer = setInterval(() => {
+                    grids[path[times]].classList.add('active');
+                    grids[path[times]].innerText = times+1;
+                    times++;
+                    if (times === path.length) {
+                        clearInterval(timmer);
+                    }
+                }, 30);
+            } else {
+                document.querySelectorAll('.grid').forEach(grid => {
+                    grid.classList.remove('active', 'start', 'end');
+                    grid.innerText = '';
+                });
+                start = index;
+                end = null;
+                this.classList.add('start');
+            }
+
+
+        }
+    });
+
+    //  根据点坐标计算代价
+    function cost(n, start, end) {
+        //  距离起始点的代价
+        let g = start + 1;
+        let h = Math.abs(n%22 - end%22) + Math.abs(Math.floor(n/22) - Math.floor(end/22));
+        let f = g + h;
+        return {f, g, h};
+    }
+
+    //  通过关系队列找出路径
+    function getPath(relation, end) {
+        //  用来存放最终路径
+        let path = [];
+        //  初始化为最终目标点，然后通过改变该变量，达到不断搜索最终点到起始点之间的直接路径。
+        let target = end;
+        function loop() {
+            //  循环关系队列，从最终点开始，根据每个节点的父节点最终找到起始点。
+            for (let i = 0; i < relation.length; i++) {
+                //  如果当前节点是target，继续递归搜索，直到所有节点中不存在target结束。（由于起始点没有父节点，所以最终target会变成undefined。）
+                if (relation[i].v === target) {
+                    //  如果当前节点的值不是最终点，就往path中压入当前节点。目的是不让最终点出现在最终的路径列表当中。
+                    if (relation[i].v !== end) {
+                        path.unshift(relation[i].v);
+                    }
+                    //  将当前target指向当前节点的父节点，然后递归继续查找。
+                    target = relation[i].p;
+                    //  删除当前节点，减少下次循环次数。
+                    relation.splice(i, 1);
+                    loop();
+                    break;
+                }
+            }
+        }
+        loop();
+        path.shift();
+        return path;
+    }
+
+
+    //  获取坐标n周围可扩展路径
+    function getAround(n) {
+        return [n - 1, n - 22, n + 1, n + 22].filter(num => {
+            //  防止最左减1后变最右
+            if( (n - 1) % 22 === 21 ) return num >= 0 && num < 484 && maps[num] !== 1 && num % 22 !== 21;
+            //  防止最右加1后变最左
+            if( (n + 1) % 22 === 0 ) return num >= 0 && num < 484 && maps[num] !== 1 && num % 22 !== 0;
+            return num >= 0 && num < 484 && maps[num] !== 1;
+        });
+    }
+
+    //  A*算法
+    function astar(start, end) {
+        console.time('time');
+        let open = [];
+        let close = [];
+        let tests = [];
+        let relation = [];
+        let g = {v: start, f: cost(start, -1, end)};
+
+        while (g.v !== end) {
+            if( open.length ) {
+                open.sort((a, b) => {
+                    if( a.f.f === b.f.f ) {
+                        return a.f.g - b.f.g;
+                    }
+                    return a.f.f - b.f.f;
+                });
+                g = open.shift();
+                if( !close.includes(g.v) ) {
+                    close.push(g.v);
+                    relation.push(g);
+                }
+                let around = getAround(g.v);
+                if( !around.length ) {
+                    console.log(1);
+                    return false;
+                }
+                for( let i=0; i<around.length; i++ ) {
+                    if( !close.includes(around[i]) && !tests.includes(around[i]) ) {
+                        open.push({v: around[i], f: cost(around[i], g.f.g, end), p: g.v});
+                        tests.push(around[i]);
+                    }
+                }
+                console.log(g);
+            } else {
+                if( !close.includes(g.v) ) {
+                    close.push(g.v);
+                    relation.push(g);
+                }
+                let around = getAround(g.v);
+                if( !around.length ) break;
+                for( let i=0; i<around.length; i++ ) {
+                    if( !close.includes(around[i]) && !tests.includes(around[i]) ) {
+                        open.push({v: around[i], f: cost(around[i], g.f.g, end), p: g.v});
+                        tests.push(around[i]);
+                    }
+                }
+            }
+        }
+        console.timeEnd('time');
+        return relation;
+    }
+
+
+</script>
+</body>
+</html>
