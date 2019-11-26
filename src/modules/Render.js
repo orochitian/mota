@@ -1,5 +1,6 @@
 import {ctx, StaticCtx, ActiveCtx, grid} from './Global'
 import source from './Source'
+import findPath from './FindPath'
 import './FindPath'
 
 let running = false;
@@ -21,7 +22,7 @@ export default {
     //  渲染地图
     map(map) {
         for( let i=0; i<map.grids.length; i++ ) {
-            if( !map.grids[i] ) {
+            if( !map.grids[i] || map.grids[i].type === 'event' ) {
                 continue;
             } else {
                 this.draw(source[map.grids[i].name], i);
@@ -50,6 +51,11 @@ export default {
             }
             step++;
         }, 50);
+    },
+    //  自动寻路
+    autoMove(map, obj, start, end) {
+        let path = findPath(start, end, map);
+        console.log(path);
     },
     //  清除格子，直接删除块
     clearGrid(index) {

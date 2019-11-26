@@ -1,6 +1,7 @@
 import {ctx, grid} from "./Global";
 import render from './Render'
 import monsters from './Monsters'
+import events from './Events'
 import {player} from './Source'
 
 let imgPos = 0;
@@ -9,7 +10,7 @@ let xPos = 0;
 
 class Player{
     constructor() {
-        this.index = 1;
+        this.index = 104;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -276,6 +277,9 @@ class Player{
         if( grid === undefined ) {
             this.canMove = false;
         } else if( grid === null ) {
+            this.canMove = true;
+        } else if( grid.type === 'event' ) {
+            events[grid.name](game);
             this.canMove = true;
         } else if( grid.name === 'wall' ) {
             this.canMove = false;

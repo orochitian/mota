@@ -222,17 +222,12 @@
                     relation.push(g);
                 }
                 let around = getAround(g.v);
-                if( !around.length ) {
-                    console.log(1);
-                    return false;
-                }
                 for( let i=0; i<around.length; i++ ) {
                     if( !close.includes(around[i]) && !tests.includes(around[i]) ) {
                         open.push({v: around[i], f: cost(around[i], g.f.g, end), p: g.v});
                         tests.push(around[i]);
                     }
                 }
-                console.log(g);
             } else {
                 if( !close.includes(g.v) ) {
                     close.push(g.v);

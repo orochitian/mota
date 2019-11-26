@@ -1,10 +1,10 @@
+import render from './Render'
+
 export default {
-    grids: [],
-    opens: [
-        {
-            type: 'yellowgate',
-            gates: [1, 5, 7],
-            monsters: [2, 4]
-        }
-    ]
+    '01'(game) {
+        let player = game.player;
+        let map = game.getMap();
+        let grid = game.getGrid(3);
+        render.autoMove(map.grids, grid, 3, 43);
+    }
 }
