@@ -53,9 +53,67 @@ export default {
         }, 50);
     },
     //  自动寻路
-    autoMove(map, obj, start, end) {
-        let path = findPath(start, end, map);
-        console.log(path);
+    autoMove(game, start, end) {
+        let map = game.getMap();
+        let obj = game.getGrid(start);
+
+        let path = findPath(start, end, map.grids);
+        let begin = start;
+
+        return new Promise(resolve => {
+            function loop() {
+                let next = path.shift();
+                let direction = null;
+                if( !next ) {
+                    resolve();
+                    return;
+                }
+                if( begin - 1 === next ) {
+                    direction = 'left';
+                } else if( begin + 1 === next ) {
+                    direction = 'right';
+                } else if( begin - 11 === next ) {
+                    direction = 'up';
+                } else if( begin + 11 === next ) {
+                    direction = 'down';
+                }
+                let x = grid[begin][0];
+                let y = grid[begin][1];
+
+                function frame() {
+                    switch (direction) {
+                        case 'left':
+                            ctx.clearRect(x, y, 32, 32);
+                            x -= 2;
+                            ctx.drawImage(source[obj.name], x, y, 32, 32);
+                            break
+                        case 'right':
+                            ctx.clearRect(x, y, 32, 32);
+                            x += 2;
+                            ctx.drawImage(source[obj.name], x, y, 32, 32);
+                            break
+                        case 'up':
+                            ctx.clearRect(x, y, 32, 32);
+                            y -= 2;
+                            ctx.drawImage(source[obj.name], x, y, 32, 32);
+                            break
+                        case 'down':
+                            ctx.clearRect(x, y, 32, 32);
+                            y += 2;
+                            ctx.drawImage(source[obj.name], x, y, 32, 32);
+                            break
+                    }
+                    if( x === grid[next][0] && y === grid[next][1] ) {
+                        begin = next;
+                        loop();
+                    } else {
+                        requestAnimationFrame(frame);
+                    }
+                }
+                frame();
+            }
+            loop();
+        })
     },
     //  清除格子，直接删除块
     clearGrid(index) {

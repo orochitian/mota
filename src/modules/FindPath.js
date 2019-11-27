@@ -2,10 +2,10 @@
 function getAround(n, maps) {
     return [n - 1, n - 11, n + 1, n + 11].filter(num => {
         //  防止最左减1后变最右
-        if( (n - 1) % 11 === 10 ) return num >= 0 && num < 121 && maps[num] === null && num % 11 !== 10;
+        if( (n - 1) % 11 === 10 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 10;
         //  防止最右加1后变最左
-        if( (n + 1) % 11 === 0 ) return num >= 0 && num < 121 && maps[num] === null && num % 11 !== 0;
-        return num >= 0 && num < 121 && maps[num] === null;
+        if( (n + 1) % 11 === 0 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 0;
+        return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event');
     });
 }
 
@@ -20,10 +20,7 @@ function getPath(relation, end) {
         for (let i = 0; i < relation.length; i++) {
             //  如果当前节点是target，继续递归搜索，直到所有节点中不存在target结束。（由于起始点没有父节点，所以最终target会变成undefined。）
             if (relation[i].value === target) {
-                //  如果当前节点的值不是最终点，就往path中压入当前节点。目的是不让最终点出现在最终的路径列表当中。
-                if (relation[i].value !== end) {
-                    path.unshift(relation[i].value);
-                }
+                path.unshift(relation[i].value);
                 //  将当前target指向当前节点的父节点，然后递归继续查找。
                 target = relation[i].parent;
                 //  删除当前节点，减少下次循环次数。
@@ -89,5 +86,6 @@ function bfs(start, end, map) {
 export default function(start, end, map) {
     let relation = bfs(start, end, map);
     let path = getPath(relation, end);
+    path.shift();
     return path;
 }
