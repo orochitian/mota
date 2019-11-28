@@ -91,3 +91,19 @@ body {
     left: 0;
     right: 0;
 }
+
+/* 玩家信息 */
+#panel .info{
+    overflow: hidden;
+}
+#panel .info p{
+    margin: 0;
+    float: left;
+    font-size: 12px;
+    width: 25%;
+    color: #333;
+    text-align: center;
+}
+#panel .info .hp-value{
+    color: red;
+}

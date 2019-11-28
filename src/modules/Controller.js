@@ -67,6 +67,7 @@ control.ontouchstart = function (ev) {
 }
 
 control.ontouchmove = function (ev) {
+    if( !game.touching ) return;
     game.clientX = ev.touches[0].clientX;
     game.clientY = ev.touches[0].clientY;
     let x = ev.touches[0].clientX - offsetX;

@@ -10,7 +10,7 @@ class Game{
         this.player = player;
         //  游戏运行状态，根据该状态判断游戏主循环是否继续
         this.running = true;
-        this.mapIndex = 1;
+        this.mapIndex = 0;
         this.maps = maps;
         this.requestID = null;
 
@@ -29,6 +29,7 @@ class Game{
                 step++;
                 if( step > 16 ) {
                     step = 1;
+                    this.player.emit('moveEnd');
                 }
             }
             this.requestID = window.requestAnimationFrame(this.main.bind(this));

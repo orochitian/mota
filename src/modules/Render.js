@@ -65,6 +65,8 @@ export default {
                 let next = path.shift();
                 let direction = null;
                 if( !next ) {
+                    game.clear(start);
+                    map.grids[end] = obj;
                     resolve();
                     return;
                 }

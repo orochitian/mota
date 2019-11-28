@@ -8,9 +8,12 @@ let imgPos = 0;
 //  角色移动图片定位
 let xPos = 0;
 
+//  自定义事件
+let listener = {}
+
 class Player{
     constructor() {
-        this.index = 104;
+        this.index = 34;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -33,6 +36,21 @@ class Player{
             redkey: 0,
             chuansong: 0,
         }
+    }
+    on(eventName, callback) {
+        listener[eventName] = callback;
+    }
+    emit(eventName) {
+        if( !listener[eventName] ) {
+            return;
+        }
+        listener[eventName]();
+    }
+    off(eventName) {
+        if( !listener[eventName] ) {
+            return;
+        }
+        delete listener[eventName];
     }
     render(step) {
         if( !step ) {
@@ -237,6 +255,7 @@ class Player{
             render.fighting(heroHp, monsterHp);
             if( times === heroHitTimes ) {
                 render.msg('战斗胜利，获得' + monster.money + '金币');
+
                 clearInterval(timmer);
                 render.fightEnd();
                 render.openGrid(index, () => {
@@ -263,12 +282,17 @@ class Player{
                         } else {
                             game.start();
                         }
+                    } else if( next.event ) {
+                        //  停止继续移动
+                        game.touching = false;
+                        hero.isMove = false;
+                        events[next.event](game);
                     } else {
                         game.start();
                     }
                 });
             }
-        }, 1000);
+        }, 500);
         hero.hp -= monsterDamage*(heroHitTimes-1);
         hero.money += monster.money;
     }
@@ -279,7 +303,12 @@ class Player{
         } else if( grid === null ) {
             this.canMove = true;
         } else if( grid.type === 'event' ) {
-            events[grid.name](game);
+            //  停止继续移动
+            game.touching = false;
+            this.isMove = false;
+            game.player.on('moveEnd', async () => {
+                events[grid.name](game);
+            });
             this.canMove = true;
         } else if( grid.name === 'wall' ) {
             this.canMove = false;
