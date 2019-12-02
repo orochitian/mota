@@ -3,12 +3,42 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
-	
+	<style>
+		.container{
+			text-align: center;
+            padding-top: 50px;
+		}
+        .check{
+            width: 384px;
+            padding: 5px;
+            margin: 0 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .8);
+            cursor: pointer;
+            transition: .4s;
+        }
+        .check.active{
+            box-shadow: 0 0 5px 3px rgba(250, 0, 0, .8);
+        }
+		#canvas{
+			background-color: #000;
+            margin: 50px 0;
+		}
+	</style>
 <body>
 	
-	<canvas id="canvas" width="480" height="384"></canvas>
-	<button id="play">播放</button>
-	<button id="pause">暂停</button>
+	<div class="container">
+        <div>
+            <img src="light1.bmp" class="check" value="1">
+            <img src="light2.bmp" class="check" value="2">
+            <img src="light3.bmp" class="check" value="3">
+        </div>
+		<canvas id="canvas" width="384" height="384"></canvas>
+
+		<div>
+			<button id="play">播放</button>
+			<button id="pause">暂停</button>
+		</div>
+	</div>
 	
 	<script>
 		let ctx = document.getElementById('canvas').getContext('2d');
@@ -48,7 +78,7 @@
 					if( _this.step / _this.speed < _this.frames.length ) {
 						if( _this.step % _this.speed === 0 ) {
 							cancelAnimationFrame(frame);
-							ctx.drawImage(_this.image, _this.frames[_this.step/_this.speed].x, _this.frames[_this.step/_this.speed].y, _this.frameWidth, _this.frameHeight, 0, 0, _this.frameWidth, _this.frameHeight);
+							ctx.drawImage(_this.image, _this.frames[_this.step/_this.speed].x, _this.frames[_this.step/_this.speed].y, _this.frameWidth, _this.frameHeight, 0, 0, _this.frameWidth*2, _this.frameHeight*2);
 						}
 						_this.step++;
 						frame = requestAnimationFrame(loop);
@@ -71,9 +101,13 @@
 			pause() {
 				this.run = false;
 			}
+			stop() {
+			    this.run = false;
+			    this.step = 0;
+            }
 		}
 	
-		let animate = new Animation('light1.bmp', 192, 192);
+		let animate = new Animation('light3.bmp', 192, 192);
 
 		document.getElementById('play').onclick = ev => {
 			animate.play(() => {
@@ -83,6 +117,26 @@
 		document.getElementById('pause').onclick = ev => {
 			animate.pause();
 		}
-	</script>
+        document.querySelectorAll('.check').forEach(item => {
+            animate.stop();
+            item.onclick = function() {
+                document.querySelectorAll('.check').forEach(check => {
+                    check.classList.remove('active');
+                });
+                this.classList.add('active');
+                switch (this.getAttribute('value')) {
+                    case '1':
+                        animate = new Animation('light1.bmp', 192, 192);
+                        break;
+                    case '2':
+                        animate = new Animation('light2.bmp', 192, 192);
+                        break;
+                    case '3':
+                        animate = new Animation('light3.bmp', 192, 192);
+                        break;
+                }
+            }
+        })
+    </script>
 </body>
 </html>
