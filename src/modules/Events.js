@@ -1,4 +1,5 @@
 import render from './Render'
+import source from './Source'
 
 export default {
     //  自动移动范例
@@ -16,7 +17,14 @@ export default {
         game.start();
     },
     //  三层魔王对话，打回2层
-    '01'() {
-
+    '01'(game) {
+        game.pause();
+        let list = [
+            {
+                icon: source.monster33,
+                content: '欢迎来到魔塔，你是第一百位挑战者。'
+            }
+        ]
+        render.dialog(list);
     }
 }

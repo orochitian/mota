@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	
+<body>
+	
+	<canvas id="canvas" width="480" height="384"></canvas>
+	<button id="play">播放</button>
+	<button id="pause">暂停</button>
+	
+	<script>
+		let ctx = document.getElementById('canvas').getContext('2d');
+
+		class Animation {
+			/*
+				image: 动画图集地址；
+				frameWidth: 帧动画宽度, 用来自动计算图片帧分布；
+				speed: 动画执行速度，最快是1，数字越大，动画越缓慢;
+			*/
+			constructor(image, frameWidth, frameHeight, speed = 5) {
+				this.step = 0;
+				this.run = true;
+				this.frameWidth = frameWidth;
+				this.frameHeight = frameHeight;
+				this.image = new Image();
+				this.image.src = image;
+				this.speed = speed;
+				this.frames = [];
+				this.image.onload = () => {
+					let col = this.image.width / frameWidth;
+					let row = this.image.height / frameHeight;
+					for( let i=0; i<row; i++ ) {
+						for( let j=0; j<col; j++ ) {
+							this.frames.push({x: frameWidth*j, y: frameHeight*i});
+						}
+					}
+				}
+				this.animate = null;
+			}
+			animation(callback) {
+				let frame = null;
+				let _this = this;
+				return function loop() {
+					cancelAnimationFrame(frame);
+					if( !_this.run ) return;
+					if( _this.step / _this.speed < _this.frames.length ) {
+						if( _this.step % _this.speed === 0 ) {
+							cancelAnimationFrame(frame);
+							ctx.drawImage(_this.image, _this.frames[_this.step/_this.speed].x, _this.frames[_this.step/_this.speed].y, _this.frameWidth, _this.frameHeight, 0, 0, _this.frameWidth, _this.frameHeight);
+						}
+						_this.step++;
+						frame = requestAnimationFrame(loop);
+					} else {
+						if( callback ) {
+							callback();
+						}
+						_this.step = 0;
+						_this.run = false;
+					}
+				}
+			}
+			play(callback) {
+				this.run = true;
+				if( !this.animate ) {
+					this.animate = this.animation(callback);
+				}
+				this.animate();
+			}
+			pause() {
+				this.run = false;
+			}
+		}
+	
+		let animate = new Animation('light1.bmp', 192, 192);
+
+		document.getElementById('play').onclick = ev => {
+			animate.play(() => {
+				console.log('动画结束');
+			});
+		}
+		document.getElementById('pause').onclick = ev => {
+			animate.pause();
+		}
+	</script>
+</body>
+</html>

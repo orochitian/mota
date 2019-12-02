@@ -18,6 +18,12 @@ let messageAnimation = oMessage.animate([
 });
 messageAnimation.cancel();
 
+//  对话层dom
+let oDialog = document.getElementById('dialog');
+oDialog.onclick = function() {
+
+}
+
 export default {
     //  渲染地图
     map(map) {
@@ -56,6 +62,7 @@ export default {
     autoMove(game, start, end) {
         let map = game.getMap();
         let obj = game.getGrid(start);
+        if( !obj ) return;
 
         let path = findPath(start, end, map.grids);
         let begin = start;
@@ -160,10 +167,28 @@ export default {
             });
         }
     },
+    //  消息
     msg(msg) {
         oMessage.innerText = msg;
         messageAnimation.cancel();
         messageAnimation.play();
+    },
+    //  对话
+    dialog(list) {
+        oDialog.innerHTML = '';
+        let aLi = document.createElement('li');
+        aLi.className = 'dialog-content';
+        let aImg = document.createElement('img');
+        aImg.className = 'dialog-icon';
+        let oItem = document.createElement('div');
+        oItem.className = 'dialog-item';
+        for( let i=0; i<list.length; i++ ) {
+            aLi.innerHTML = list[i].content;
+            aImg = list[i].icon;
+            oItem.appendChild(aLi);
+            oItem.appendChild(aImg);
+            oDialog.appendChild(oItem);
+        }
     },
     //  暗雷伤害
     hurt(game) {
