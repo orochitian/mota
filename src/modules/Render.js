@@ -18,12 +18,6 @@ let messageAnimation = oMessage.animate([
 });
 messageAnimation.cancel();
 
-//  对话层dom
-let oDialog = document.getElementById('dialog');
-oDialog.onclick = function() {
-
-}
-
 export default {
     //  渲染地图
     map(map) {
@@ -174,20 +168,36 @@ export default {
         messageAnimation.play();
     },
     //  对话
-    dialog(list) {
-        oDialog.innerHTML = '';
-        let aLi = document.createElement('li');
-        aLi.className = 'dialog-content';
-        let aImg = document.createElement('img');
-        aImg.className = 'dialog-icon';
-        let oItem = document.createElement('div');
-        oItem.className = 'dialog-item';
-        for( let i=0; i<list.length; i++ ) {
-            aLi.innerHTML = list[i].content;
-            aImg = list[i].icon;
-            oItem.appendChild(aLi);
-            oItem.appendChild(aImg);
-            oDialog.appendChild(oItem);
+    dialog(list, callback) {
+        //  对话层dom
+        let oDialog = document.getElementById('dialog');
+        let animation = null;
+        let index = 0;
+        let listArr = [];
+        let dialogList = document.getElementById('dialog-list');
+        dialogList.innerHTML = '';
+        document.getElementById('dialog-icon').src = list[index].icon.src;
+        list.forEach((li, index) => {
+            let oli = document.createElement('li');
+            oli.className = 'dialog-li';
+            oli.innerHTML = li.content;
+            dialogList.appendChild(oli);
+            listArr.push(oli);
+        });
+        oDialog.style.visibility = 'visible';
+        oDialog.onclick = () => {
+            if( animation && animation.playState !== 'finished' ) return;
+            index++;
+            if( index < list.length ) {
+                if( list[index].icon ) {
+                    document.getElementById('dialog-icon').src = list[index].icon.src;
+                }
+                listArr[index-1].style.visibility = 'hidden';
+                animation = listArr[index].animate([{opacity: 0}, {opacity: 1}], {duration: 800, fill: 'forwards'});
+            } else {
+                oDialog.style.visibility = 'hidden';
+                callback();
+            }
         }
     },
     //  暗雷伤害

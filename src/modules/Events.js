@@ -13,7 +13,6 @@ export default {
         await render.autoMove(game, 110, 70);
         await render.autoMove(game, 115, 71);
         await render.autoMove(game, 120, 72);
-        game.player.off('moveEnd');
         game.start();
     },
     //  三层魔王对话，打回2层
@@ -23,8 +22,17 @@ export default {
             {
                 icon: source.monster33,
                 content: '欢迎来到魔塔，你是第一百位挑战者。'
+            },
+            {
+                content: '你将死在这里！'
+            },
+            {
+                icon: source.monster01,
+                content: '你说撒呢。。。。'
             }
         ]
-        render.dialog(list);
+        render.dialog(list, async () => {
+            game.start();
+        });
     }
 }

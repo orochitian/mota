@@ -26,6 +26,7 @@ window.onload = () => {
         game.mapIndex = save.mapIndex;
         game.init();
     }
+
 }
 
 

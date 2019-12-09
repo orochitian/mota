@@ -29,7 +29,6 @@ class Game{
                 step++;
                 if( step > 16 ) {
                     step = 1;
-                    this.player.emit('moveEnd');
                 }
             }
             this.requestID = window.requestAnimationFrame(this.main.bind(this));

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<style>
-		.container{
-			text-align: center;
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .container {
+            text-align: center;
             padding-top: 50px;
-		}
-        .check{
+        }
+
+        .check {
             width: 384px;
             padding: 5px;
             margin: 0 20px;
@@ -16,127 +17,126 @@
             cursor: pointer;
             transition: .4s;
         }
-        .check.active{
+
+        .check.active {
             box-shadow: 0 0 5px 3px rgba(250, 0, 0, .8);
         }
-		#canvas{
-			background-color: #000;
+
+        #canvas {
+            background-color: #000;
             margin: 50px 0;
-		}
-	</style>
+        }
+    </style>
 <body>
-	
-	<div class="container">
-        <div>
-            <img src="light1.bmp" class="check" value="1">
-            <img src="light2.bmp" class="check" value="2">
-            <img src="light3.bmp" class="check" value="3">
-        </div>
-		<canvas id="canvas" width="384" height="384"></canvas>
 
-		<div>
-			<button id="play">播放</button>
-			<button id="pause">暂停</button>
-		</div>
-	</div>
-	
-	<script>
-		let ctx = document.getElementById('canvas').getContext('2d');
+<div class="container">
+    <div>
+        <!--<img src="light1.bmp" class="check" value="1">-->
+        <!--<img src="light2.bmp" class="check" value="2">-->
+        <!--<img src="light3.bmp" class="check" value="3">-->
+        <img src="fire.png" class="check" value="4">
+        <img src="daoguang.png" class="check" value="4">
+        <img src="huoying.png" class="check" value="4">
+    </div>
+    <canvas id="canvas" width="384" height="384"></canvas>
 
-		class Animation {
-			/*
-				image: 动画图集地址；
-				frameWidth: 帧动画宽度, 用来自动计算图片帧分布；
-				speed: 动画执行速度，最快是1，数字越大，动画越缓慢;
-			*/
-			constructor(image, frameWidth, frameHeight, speed = 5) {
-				this.step = 0;
-				this.run = true;
-				this.frameWidth = frameWidth;
-				this.frameHeight = frameHeight;
-				this.image = new Image();
-				this.image.src = image;
-				this.speed = speed;
-				this.frames = [];
-				this.image.onload = () => {
-					let col = this.image.width / frameWidth;
-					let row = this.image.height / frameHeight;
-					for( let i=0; i<row; i++ ) {
-						for( let j=0; j<col; j++ ) {
-							this.frames.push({x: frameWidth*j, y: frameHeight*i});
-						}
-					}
-				}
-				this.animate = null;
-			}
-			animation(callback) {
-				let frame = null;
-				let _this = this;
-				return function loop() {
-					cancelAnimationFrame(frame);
-					if( !_this.run ) return;
-					if( _this.step / _this.speed < _this.frames.length ) {
-						if( _this.step % _this.speed === 0 ) {
-							cancelAnimationFrame(frame);
-							ctx.drawImage(_this.image, _this.frames[_this.step/_this.speed].x, _this.frames[_this.step/_this.speed].y, _this.frameWidth, _this.frameHeight, 0, 0, _this.frameWidth*2, _this.frameHeight*2);
-						}
-						_this.step++;
-						frame = requestAnimationFrame(loop);
-					} else {
-						if( callback ) {
-							callback();
-						}
-						_this.step = 0;
-						_this.run = false;
-					}
-				}
-			}
-			play(callback) {
-				this.run = true;
-				if( !this.animate ) {
-					this.animate = this.animation(callback);
-				}
-				this.animate();
-			}
-			pause() {
-				this.run = false;
-			}
-			stop() {
-			    this.run = false;
-			    this.step = 0;
-            }
-		}
-	
-		let animate = new Animation('light3.bmp', 192, 192);
+    <div>
+        <button id="play">播放</button>
+        <button id="pause">暂停</button>
+    </div>
+</div>
 
-		document.getElementById('play').onclick = ev => {
-			animate.play(() => {
-				console.log('动画结束');
-			});
-		}
-		document.getElementById('pause').onclick = ev => {
-			animate.pause();
-		}
-        document.querySelectorAll('.check').forEach(item => {
-            animate.stop();
-            item.onclick = function() {
-                document.querySelectorAll('.check').forEach(check => {
-                    check.classList.remove('active');
-                });
-                this.classList.add('active');
-                switch (this.getAttribute('value')) {
-                    case '1':
-                        animate = new Animation('light1.bmp', 192, 192);
-                        break;
-                    case '2':
-                        animate = new Animation('light2.bmp', 192, 192);
-                        break;
-                    case '3':
-                        animate = new Animation('light3.bmp', 192, 192);
-                        break;
+<script>
+    let ctx = document.getElementById('canvas').getContext('2d');
+
+    class Animation {
+        /*
+            image: 动画图集地址；
+            frameWidth: 帧动画宽度, 用来自动计算图片帧分布；
+            speed: 动画执行速度，最快是1，数字越大，动画越缓慢;
+        */
+        constructor(image, frameWidth, frameHeight, speed = 6) {
+            this.step = 0;
+            this.run = true;
+            this.frameWidth = frameWidth;
+            this.frameHeight = frameHeight;
+            this.image = new Image();
+            this.image.src = image;
+            this.speed = speed;
+            this.frames = [];
+            this.image.onload = () => {
+                let col = this.image.width / frameWidth;
+                let row = this.image.height / frameHeight;
+                for (let i = 0; i < row; i++) {
+                    for (let j = 0; j < col; j++) {
+                        this.frames.push({x: frameWidth * j, y: frameHeight * i});
+                    }
                 }
             }
-        })
-    </script>
+            this.animate = null;
+        }
+
+        animation(callback) {
+            let frame = null;
+            let _this = this;
+            return function loop() {
+                cancelAnimationFrame(frame);
+                if (!_this.run) return;
+                if (_this.step / _this.speed < _this.frames.length) {
+                    if (_this.step % _this.speed === 0) {
+                        ctx.clearRect(0, 0, _this.frameWidth, _this.frameHeight);
+                        ctx.drawImage(_this.image, _this.frames[_this.step / _this.speed].x, _this.frames[_this.step / _this.speed].y, _this.frameWidth, _this.frameHeight, 0, 0, _this.frameWidth, _this.frameHeight);
+                    }
+                    _this.step++;
+                    frame = requestAnimationFrame(loop);
+                } else {
+                    if (callback) {
+                        callback();
+                    }
+                    _this.step = 0;
+                    _this.run = false;
+                }
+            }
+        }
+
+        play(callback) {
+            this.run = true;
+            if (!this.animate) {
+                this.animate = this.animation(callback);
+            }
+            this.animate();
+        }
+
+        pause() {
+            this.run = false;
+        }
+
+        stop() {
+            this.run = false;
+            this.step = 0;
+        }
+    }
+
+    let animate = new Animation('light1.bmp', 192, 192);
+
+    document.getElementById('play').onclick = ev => {
+        animate.play(() => {
+            console.log('动画结束');
+        });
+    }
+    document.getElementById('pause').onclick = ev => {
+        animate.pause();
+    }
+    document.querySelectorAll('.check').forEach(item => {
+        animate.stop();
+        item.onclick = function () {
+            document.querySelectorAll('.check').forEach(check => {
+                check.classList.remove('active');
+            });
+            this.classList.add('active');
+            animate = new Animation(this.getAttribute('src'), 192, 192);
+        }
+    })
+</script>
 </body>
 </html>

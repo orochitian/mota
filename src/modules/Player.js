@@ -37,21 +37,6 @@ class Player{
             chuansong: 0,
         }
     }
-    on(eventName, callback) {
-        listener[eventName] = callback;
-    }
-    emit(eventName) {
-        if( !listener[eventName] ) {
-            return;
-        }
-        listener[eventName]();
-    }
-    off(eventName) {
-        if( !listener[eventName] ) {
-            return;
-        }
-        delete listener[eventName];
-    }
     render(step) {
         if( !step ) {
             ctx.drawImage(player, 0, imgPos, 32, 32, this.position[0], this.position[1], 32, 32);
@@ -149,6 +134,13 @@ class Player{
         if( this.position.toString() === this.target.toString() ) {
             this.getHurt(game, this.index);
             this.stopMove();
+            let grid = game.getGrid(this.index);
+            //  事件需要移动完成之后触发，需要移动完成后触发的都可以写在这里
+            if( grid && grid.type === 'event' ) {
+                game.touching = false;
+                this.isMove = false;
+                events[grid.name](game);
+            }
             if( this.isMove ) {
                 this.startMove(this.direction, game);
             } else if( this.turn ) {
@@ -303,12 +295,6 @@ class Player{
         } else if( grid === null ) {
             this.canMove = true;
         } else if( grid.type === 'event' ) {
-            //  停止继续移动
-            game.touching = false;
-            this.isMove = false;
-            game.player.on('moveEnd', async () => {
-                events[grid.name](game);
-            });
             this.canMove = true;
         } else if( grid.name === 'wall' ) {
             this.canMove = false;
