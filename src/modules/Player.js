@@ -324,12 +324,14 @@ class Player{
                 guard++;
             } else if( area[i].name === 'monster03' ) {
                 console.log('收到200点暴击');
+                game.player.hp <= 200 ? game.player.hp = 1 : game.player.hp -= 200;
                 render.hurt(game);
                 return;
             }
         }
         if( guard > 1 ) {
             render.hurt(game);
+            game.player.hp = Math.ceil(game.player.hp / 2);
             console.log('hp减少50%');
         }
     }

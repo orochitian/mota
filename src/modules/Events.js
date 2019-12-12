@@ -2,7 +2,7 @@ import render from './Render'
 import source from './Source'
 
 export default {
-    //  自动移动范例
+    //  自动移动示例
     async 'autoMove'(game) {
         game.pause();
         await render.autoMove(game, 0, 48);
@@ -31,7 +31,7 @@ export default {
                 content: '你说撒呢。。。。'
             }
         ]
-        render.dialog(list, async () => {
+        render.dialog(list, () => {
             game.start();
         });
     }

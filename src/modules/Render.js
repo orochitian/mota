@@ -232,6 +232,9 @@ export default {
             window.requestAnimationFrame(this.fram.bind(this, callback));
         }
     },
+    fadeIn(images) {
+
+    },
     //  场景切换
     changeScene(game, callback) {
         //  callback 是场景切换到一半时执行的。
