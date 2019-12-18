@@ -41,6 +41,11 @@ window.onload = () => {
             items: window.items,
             monsters: window.monsters,
             npcs: window.npcs,
+            event: {
+                src: './images/event.png',
+                type: 'event',
+                active: false
+            }
         },
         methods: {
             //  选择
@@ -49,7 +54,9 @@ window.onload = () => {
                     item.active = false;
                     this.current = null;
                 } else {
-                    group.map(item => item.active = false);
+                    if( group ) {
+                        group.map(item => item.active = false);
+                    }
                     item.active = true;
                     this.current = item;
                 }
@@ -62,7 +69,6 @@ window.onload = () => {
             openOk() {
                 this.open.gates = this.open.gates.split(' ').map(item => parseInt(item));
                 this.open.monsters = this.open.monsters.split(' ').map(item => parseInt(item));
-                console.log(this.open);
                 this.map.grids[this.eventIndex].open = this.open;
             },
             //  放置
@@ -80,7 +86,7 @@ window.onload = () => {
                 }
                 if( this.current ) {
                     this.eventIndex = index;
-                    if( this.current.type === 'npc' || this.hasEvent ) {
+                    if( this.current.type === 'npc' || this.hasEvent || this.current.type === 'event' ) {
                         this.eventModal = true;
                     }
                     if( this.current.type === 'monster' && this.openGate ) {

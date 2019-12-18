@@ -13,7 +13,7 @@ let listener = {}
 
 class Player{
     constructor() {
-        this.index = 34;
+        this.index = 115;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;

@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>BFS 算法</title>
     <style>
         body {
             background: #ccc;
         }
-
+        h1{text-align: center;}
         #map {
             width: 720px;
-            margin: 50px auto;
+            margin: 0px auto;
         }
 
         .grid {
@@ -22,26 +22,31 @@
             transition: .3s;
             font-size: 10px;
             color: #333;
+            text-align: center;
+            line-height: 30px;
         }
         .grid p{
             margin: 0;
         }
 
+        .start {
+            background-color: rgb(69, 137, 148);
+        }
         .end {
-            background: #000;
+            background: rgb(255, 94, 72);
         }
 
         .disabled {
-            background: red;
+            background: #333;
         }
 
         .active {
-            background: lightblue;
+            background: rgb(250, 227, 113);
         }
     </style>
 </head>
 <body>
-
+<h1>BFS 寻路算法</h1>
 <div id="map">
 
 </div>
@@ -57,7 +62,7 @@
         0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 0, 1, 2, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -73,6 +78,9 @@
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ]
+
+    let start = null;
+    let end = null;
     maps.forEach((n, index) => {
         var grid = document.createElement('span');
         if (n === 1) {
@@ -85,27 +93,46 @@
         grid.index = index;
         oMap.appendChild(grid);
         grid.onclick = function () {
-            document.querySelectorAll('.grid').forEach(grid => {
-                grid.classList.remove('active');
-            });
-            let relation = bfs(index, maps.indexOf(2));
-            let grids = document.getElementsByClassName('grid');
-            // relation.forEach((item, i) => {
-            //     grids[item.value].innerHTML = `<p>i: ${item.value}</p><p>p: ${item.parent}</p>`
-            // });
-            let path = getPath(relation, maps.indexOf(2));
-            if (path.length < 1) {
-                return;
-            }
-            let times = 0;
-            let timmer = null;
-            timmer = setInterval(() => {
-                grids[path[times]].classList.add('active');
-                times++;
-                if (times === path.length) {
-                    clearInterval(timmer);
+            if( start === null && end === null ) {
+                document.querySelectorAll('.grid').forEach(grid => {
+                    grid.classList.remove('active');
+                });
+                start = index;
+                this.classList.add('start');
+            } else if( start !== null && end === null ) {
+                this.classList.add('end');
+                end = index;
+                let relation = bfs(start, end);
+                relation.shift();
+                let grids = document.getElementsByClassName('grid');
+                relation.forEach((item, i) => {
+                    // grids[item.value].innerHTML = `<p>i: ${item.value}</p><p>p: ${item.parent}</p>`;
+                    grids[item.value].innerHTML = `x`
+                });
+                let path = getPath(relation, end);
+                if (path.length < 1) {
+                    return;
                 }
-            }, 30);
+                let times = 0;
+                let timmer = null;
+                timmer = setInterval(() => {
+                    grids[path[times]].classList.add('active');
+                    grids[path[times]].innerText = times+1;
+                    times++;
+                    if (times === path.length) {
+                        clearInterval(timmer);
+                    }
+                }, 30);
+            } else {
+                document.querySelectorAll('.grid').forEach(grid => {
+                    grid.classList.remove('active', 'start', 'end');
+                    grid.innerText = '';
+                });
+                start = index;
+                end = null;
+                this.classList.add('start');
+            }
+
         }
     })
 

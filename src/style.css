@@ -105,7 +105,11 @@ body {
     /*display: none;*/
     position: relative;
     flex: 1;
-    background-color: #ccc;
+    box-sizing: border-box;
+    border: 10px solid transparent;
+    border-image: url("./images/panel_border.png") 10 10 round;
+    /*background: url("./images/panel_border.png") no-repeat center;*/
+    /*background-size: cover;*/
     user-select: none;
 }
 
@@ -146,7 +150,9 @@ body {
 
 /* 玩家信息 */
 #panel .info{
+    padding: 5px 0;
     overflow: hidden;
+    border-bottom: 1px dashed #000;
 }
 #panel .info p{
     margin: 0;
@@ -155,7 +161,8 @@ body {
     width: 25%;
     color: #333;
     text-align: center;
+    color: orangered;
 }
-#panel .info .hp-value{
-    color: red;
-}
+/*#panel .info .hp-value{*/
+    /*color: red;*/
+/*}*/

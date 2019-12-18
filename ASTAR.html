@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>A* 算法</title>
     <style>
         body {
             background: #ccc;
         }
-
+        h1{text-align: center;}
         #map {
             width: 720px;
-            margin: 50px auto;
+            margin: 0px auto;
             background-color: #fff;
         }
 
@@ -24,6 +24,7 @@
             transition: .3s;
             text-align: center;
             line-height: 30px;
+            font-size: 10px;
             /*overflow: auto;*/
         }
         .grid p{
@@ -47,7 +48,7 @@
     </style>
 </head>
 <body>
-
+<h1>A* 寻路算法</h1>
 <div id="map">
 
 </div>
@@ -58,7 +59,7 @@
 
     const maps = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -117,10 +118,6 @@
                     grids[item.v].innerHTML = `x`
                 });
                 let path = getPath(relation, end);
-                // relation.forEach((item, i) => {
-                //     // grids[item.v].innerHTML = `<p>f: ${item.f.f}</p><p>g: ${item.f.g}</p><p>h: ${item.f.h}</p>`
-                //     grids[item.v].innerHTML = `x`
-                // });
                 if (path.length < 1) {
                     return;
                 }

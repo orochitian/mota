@@ -1,7 +1,6 @@
 import {ctx, StaticCtx, ActiveCtx, grid} from './Global'
 import source from './Source'
 import findPath from './FindPath'
-import './FindPath'
 
 let running = false;
 
@@ -232,8 +231,20 @@ export default {
             window.requestAnimationFrame(this.fram.bind(this, callback));
         }
     },
-    fadeIn(images) {
-
+    status(player) {
+        document.querySelector('.hp-value').innerHTML = player.hp;
+        document.querySelector('.attack-value').innerHTML = player.attack;
+        document.querySelector('.defense-value').innerHTML = player.defense;
+        document.querySelector('.money-value').innerHTML = player.money;
+    },
+    //  清除画布
+    staticClear() {
+        StaticCtx.clearRect(0, 0, 352, 352);
+    },
+    staticDraw(src, index) {
+        let x = grid[index][0];
+        let y = grid[index][1];
+        StaticCtx.drawImage(src, 0, 0, 32, 32, x, y, 32, 32);
     },
     //  场景切换
     changeScene(game, callback) {

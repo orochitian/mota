@@ -55,10 +55,13 @@
             其他
             <div slot="content">
                 <Row :gutter="12">
-                    <i-col span="24">
+                    <i-col span="12">
                         <i-input v-model.number="map.index" placeholder="0 - 50层">
                             <span slot="prepend">当前楼层：</span>
                         </i-input>
+                    </i-col>
+                    <i-col span="12">
+                        <img class="icon" shape="square" @click="check(event)" :src="event.src" :class="{active: event.active}" />
                     </i-col>
                 </Row>
                 <Row :gutter="12" style="margin-top: 10px;">
