@@ -17,6 +17,8 @@ let messageAnimation = oMessage.animate([
 });
 messageAnimation.cancel();
 
+let oStatic = document.getElementById('static');
+
 export default {
     //  渲染地图
     map(map) {
@@ -167,37 +169,39 @@ export default {
         messageAnimation.play();
     },
     //  对话
-    dialog(list, callback) {
-        //  对话层dom
-        let oDialog = document.getElementById('dialog');
-        let animation = null;
-        let index = 0;
-        let listArr = [];
-        let dialogList = document.getElementById('dialog-list');
-        dialogList.innerHTML = '';
-        document.getElementById('dialog-icon').src = list[index].icon.src;
-        list.forEach((li, index) => {
-            let oli = document.createElement('li');
-            oli.className = 'dialog-li';
-            oli.innerHTML = li.content;
-            dialogList.appendChild(oli);
-            listArr.push(oli);
-        });
-        oDialog.style.visibility = 'visible';
-        oDialog.onclick = () => {
-            if( animation && animation.playState !== 'finished' ) return;
-            index++;
-            if( index < list.length ) {
-                if( list[index].icon ) {
-                    document.getElementById('dialog-icon').src = list[index].icon.src;
+    dialog(list) {
+        return new Promise(resolve => {
+            //  对话层dom
+            let oDialog = document.getElementById('dialog');
+            let animation = null;
+            let index = 0;
+            let listArr = [];
+            let dialogList = document.getElementById('dialog-list');
+            dialogList.innerHTML = '';
+            document.getElementById('dialog-icon').src = list[index].icon.src;
+            list.forEach((li, index) => {
+                let oli = document.createElement('li');
+                oli.className = 'dialog-li';
+                oli.innerHTML = li.content;
+                dialogList.appendChild(oli);
+                listArr.push(oli);
+            });
+            oDialog.style.visibility = 'visible';
+            oDialog.onclick = () => {
+                if( animation && animation.playState !== 'finished' ) return;
+                index++;
+                if( index < list.length ) {
+                    if( list[index].icon ) {
+                        document.getElementById('dialog-icon').src = list[index].icon.src;
+                    }
+                    listArr[index-1].style.visibility = 'hidden';
+                    animation = listArr[index].animate([{opacity: 0}, {opacity: 1}], {duration: 800, fill: 'forwards'});
+                } else {
+                    oDialog.style.visibility = 'hidden';
+                    resolve();
                 }
-                listArr[index-1].style.visibility = 'hidden';
-                animation = listArr[index].animate([{opacity: 0}, {opacity: 1}], {duration: 800, fill: 'forwards'});
-            } else {
-                oDialog.style.visibility = 'hidden';
-                callback();
             }
-        }
+        });
     },
     //  暗雷伤害
     hurt(game) {
@@ -245,6 +249,41 @@ export default {
         let x = grid[index][0];
         let y = grid[index][1];
         StaticCtx.drawImage(src, 0, 0, 32, 32, x, y, 32, 32);
+    },
+    black() {
+        StaticCtx.save();
+        StaticCtx.fillStyle = '#000';
+        StaticCtx.fillRect(0, 0, 352, 352);
+        StaticCtx.restore();
+    },
+    staticShow() {
+        return new Promise(resolve => {
+            let animation = oStatic.animate([
+                {opacity: 0},
+                {opacity: 1}
+            ], {
+                duration: 1000,
+                fill: 'forwards'
+            });
+            animation.onfinish = () => {
+                resolve();
+            }
+        });
+
+    },
+    staticHide() {
+        return new Promise(resolve => {
+            let animation = oStatic.animate([
+                {opacity: 1},
+                {opacity: 0}
+            ], {
+                duration: 1000
+            });
+            animation.onfinish = () => {
+                this.staticClear();
+                resolve();
+            }
+        })
     },
     //  场景切换
     changeScene(game, callback) {

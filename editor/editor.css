@@ -18,15 +18,16 @@ body{
     color: #19be6b;
     font-size: 14px;
 }
-.collapse, .get-map{
-    width: 700px;
-    float: left;
-    margin-left: 50px;
-    margin-bottom: 20px;
+.right{
+    float: right;
+    width: 50vw;
+    text-align: center;
+}
+.get-map{
+    margin: 0 20px;
 }
 .map{
-    float: right;
-    margin-right: 50px;
+    margin: 0 auto;
     width: 364px;
     height: 364px;
     background: url("../src/images/grid.png");

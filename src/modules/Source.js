@@ -2,6 +2,9 @@ const source = {
     //  角色
     player: require('../images/player.png'),
 
+    //  闪电
+    attack: require('../images/attack.png'),
+
     //  对战背景
     battle: require('../images/battleBg.jpg'),
     vs: require('../images/vs.png'),

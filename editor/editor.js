@@ -7,6 +7,8 @@ window.onload = () => {
            }
         },
         data: {
+            //  游戏素材抽屉是否显示
+            drawerIsShow: true,
             //  事件弹层是否显示
             eventModal: false,
             //  开门弹层是否显示
@@ -63,7 +65,7 @@ window.onload = () => {
             },
             //  添加事件
             eventOk() {
-                this.map.grids[this.eventIndex].event = this.eventID;
+                this.map.grids[this.eventIndex].name = this.eventID;
             },
             //  添加事件
             openOk() {
@@ -109,18 +111,18 @@ window.onload = () => {
             }
         },
         mounted() {
-            // window.onkeydown = ev => {
-            //     if( ev.keyCode === 116 ) {
-            //         this.$Modal.confirm({
-            //             title: '是否刷新页面？',
-            //             onOk() {
-            //                 window.location.reload();
-            //             }
-            //         });
-            //         return false;
-            //     }
-            //     return true;
-            // }
+            window.onkeydown = ev => {
+                if( ev.keyCode === 116 ) {
+                    this.$Modal.confirm({
+                        title: '是否刷新页面？',
+                        onOk() {
+                            window.location.reload();
+                        }
+                    });
+                    return false;
+                }
+                return true;
+            }
         }
     })
 }

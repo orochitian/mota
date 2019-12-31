@@ -32,20 +32,18 @@ body {
     border: 12px solid transparent;
 }
 #dialog{
-    /*box-sizing: border-box;*/
     visibility: hidden;
     position: absolute;
-    left: 24px;
-    top: 0;
-    right: 24px;
-    bottom: 0;
-    height: 40%;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     margin: auto;
-    background-image: linear-gradient(to right, rgba(0,0,0,.8), rgba(0,0,0,.6), rgba(0,0,0,.8));
+    background-color: #000;
     border: 4px solid transparent;
     border-image: linear-gradient(to right, #c8c8c8, #f4f4f4, #c8c8c8) 1 1;
     color: #ddd;
     letter-spacing: 1px;
+    z-index: 999;
 }
 #dialog:after{
     content: '点击继续...';
@@ -53,22 +51,22 @@ body {
     right: 20px;
     bottom: 10px;
     color: #ccc;
-    font-size: 18px;
+    font-size: 14px;
 }
 #dialog-icon{
     position: absolute;
     left: 20px;
     top: 20px;
-    width: 64px;
-    height: 64px;
+    width: 32px;
+    height: 32px;
 }
 #dialog-list{
     margin: 0;
     padding: 0;
     position: absolute;
-    left: 100px;
-    right: 50px;
-    top: 100px;
+    left: 30px;
+    right: 30px;
+    top: 70px;
     bottom: 50px;
     overflow: hidden;
 }
@@ -78,7 +76,7 @@ body {
     width: 100%;
     height: 100%;
     opacity: 0;
-    font-size: 20px;
+    font-size: 12px;
 }
 #dialog-list li:nth-of-type(1){
     opacity: 1;
@@ -106,10 +104,8 @@ body {
     position: relative;
     flex: 1;
     box-sizing: border-box;
-    border: 10px solid transparent;
-    border-image: url("./images/panel_border.png") 10 10 round;
-    /*background: url("./images/panel_border.png") no-repeat center;*/
-    /*background-size: cover;*/
+    background: url("./images/panel_bg.png") no-repeat center;
+    background-size: 100% 100%;
     user-select: none;
 }
 
@@ -163,6 +159,23 @@ body {
     text-align: center;
     color: orangered;
 }
-/*#panel .info .hp-value{*/
-    /*color: red;*/
-/*}*/
+#menu-wrap{
+    position: fixed;
+    width: 100%;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: .5s;
+    z-index: 9999;
+}
+#menu-wrap .title{
+    color: #666;
+    text-align: center;
+}
+#menu-wrap button{
+    display: block;
+    width: 80%;
+    margin: 20px auto;
+    line-height: 2em;
+}

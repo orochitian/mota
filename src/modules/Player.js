@@ -13,7 +13,7 @@ let listener = {}
 
 class Player{
     constructor() {
-        this.index = 115;
+        this.index = 54;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -35,6 +35,28 @@ class Player{
             bluekey: 1,
             redkey: 0,
             chuansong: 0,
+        }
+    }
+    set(option) {
+        Object.assign(this, option);
+        if( option.index ) {
+            this.position = [grid[option.index][0], grid[option.index][1]];
+        }
+        if( option.direct ) {
+            switch (option.direct) {
+                case 'up':
+                    imgPos = 96;
+                    break;
+                case 'down':
+                    imgPos = 0;
+                    break;
+                case 'left':
+                    imgPos = 32;
+                    break;
+                case 'right':
+                    imgPos = 64;
+                    break;
+            }
         }
     }
     render(step) {
@@ -139,6 +161,7 @@ class Player{
             if( grid && grid.type === 'event' ) {
                 game.touching = false;
                 this.isMove = false;
+                game.pause();
                 events[grid.name](game);
             }
             if( this.isMove ) {
@@ -298,6 +321,10 @@ class Player{
             this.canMove = true;
         } else if( grid.name === 'wall' ) {
             this.canMove = false;
+        } else if( grid.type === 'npc' ) {
+            this.canMove = false;
+            game.pause();
+            events[grid.event](game);
         } else if( grid.type === 'item' ) {
             this.getItem(game, index);
             this.canMove = true;
