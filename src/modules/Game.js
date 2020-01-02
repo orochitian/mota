@@ -36,6 +36,7 @@ class Game{
     }
     //  游戏初始化
     init() {
+        render.status(this.player);
         render.clearMap();
         render.map(this.getMap());
         this.player.render();

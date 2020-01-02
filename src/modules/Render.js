@@ -1,6 +1,7 @@
 import {ctx, StaticCtx, ActiveCtx, grid} from './Global'
 import source from './Source'
 import findPath from './FindPath'
+import monsters from './Monsters'
 
 let running = false;
 
@@ -187,7 +188,7 @@ export default {
                 listArr.push(oli);
             });
             oDialog.style.visibility = 'visible';
-            oDialog.onclick = () => {
+            oDialog.ontouchend = ev => {
                 if( animation && animation.playState !== 'finished' ) return;
                 index++;
                 if( index < list.length ) {
@@ -222,9 +223,9 @@ export default {
             StaticCtx.fillRect(0, 0, 352, 352);
             if( StaticCtx.globalAlpha < 0.1 ) {
                 running = false;
+                StaticCtx.restore();
                 game.start();
                 game.player.keepMove(game);
-                StaticCtx.restore();
             }
         });
     },
@@ -235,11 +236,17 @@ export default {
             window.requestAnimationFrame(this.fram.bind(this, callback));
         }
     },
-    status(player) {
-        document.querySelector('.hp-value').innerHTML = player.hp;
-        document.querySelector('.attack-value').innerHTML = player.attack;
-        document.querySelector('.defense-value').innerHTML = player.defense;
-        document.querySelector('.money-value').innerHTML = player.money;
+    //  渲染角色数据显示
+    status(player, filter) {
+        if( !filter ) {
+            document.querySelector('.hp-value').innerHTML = player.hp;
+            document.querySelector('.attack-value').innerHTML = player.attack;
+            document.querySelector('.defense-value').innerHTML = player.defense;
+            document.querySelector('.money-value').innerHTML = player.money;
+        } else {
+            document.querySelector('.'+filter+'-value').innerHTML = player[filter];
+        }
+
     },
     //  清除画布
     staticClear() {
@@ -250,11 +257,20 @@ export default {
         let y = grid[index][1];
         StaticCtx.drawImage(src, 0, 0, 32, 32, x, y, 32, 32);
     },
+    //  黑屏
     black() {
         StaticCtx.save();
         StaticCtx.fillStyle = '#000';
         StaticCtx.fillRect(0, 0, 352, 352);
         StaticCtx.restore();
+    },
+    //  全屏遮罩显示
+    maskShow() {
+        document.getElementById('mask').style.visibility = 'visible';
+    },
+    //  全屏遮罩隐藏
+    maskHide() {
+        document.getElementById('mask').style.visibility = 'hidden';
     },
     staticShow() {
         return new Promise(resolve => {
@@ -314,6 +330,7 @@ export default {
     },
     //  开始战斗
     fightStart(hero, monster) {
+        this.maskShow();
         StaticCtx.save();
         //  1、半透明背景
         StaticCtx.fillStyle = 'rgba(0,0,0,.5)';
@@ -361,7 +378,51 @@ export default {
     },
     //  战斗结束
     fightEnd() {
+        this.maskHide();
         StaticCtx.clearRect(0, 0, 352, 352);
         ActiveCtx.clearRect(0, 0, 352, 352);
     },
+    //  怪物图鉴列表
+    monsterList(game) {
+        let oList = document.getElementById('monster-list');
+        oList.innerHTML = '';
+        let monsterList = new Set(game.getMap().grids.filter(item => item && item.type === 'monster').map(item => item.name));
+        monsterList.forEach(item => {
+            let lost;
+            let hero = game.player;
+            let monster = monsters[item];
+            let heroDamage = hero.attack - monster.defense < 0 ? 0 : hero.attack - monster.defense;
+            let monsterDamage = monster.attack - hero.defense < 0 ? 0 : monster.attack - hero.defense;
+            let heroHitTimes = Math.ceil(monster.hp / heroDamage);
+            let monsterHitTimes = Math.ceil(hero.hp / monsterDamage);
+            if( heroDamage === 0 ) {
+                lost = '打不过';
+            } else if( heroHitTimes > monsterHitTimes ) {
+                lost = monsterDamage*(heroHitTimes-1) + '(打不过)';
+            } else {
+                lost = monsterDamage*(heroHitTimes-1);
+            }
+
+            let row = document.createElement('div');
+            row.className = 'monster-row';
+            row.innerHTML = `
+                <div class="left">
+                    <div class="icon"><img src="${source[monster.img].src}" /></div>
+                    <div class="name">${monster.name}</div>
+                </div>
+                <div class="right">
+                    <div class="top">
+                        <p><img src="${source.hp.src}" /> <span>${monster.hp}</span></p>
+                        <p><img src="${source.tiejian.src}" /> <span>${monster.attack}</span></p>
+                        <p><img src="${source.tiedun.src}" /> <span>${monster.defense}</span></p>
+                    </div>
+                    <div class="bottom">
+                        <p><img src="${source.luckycoins.src}" /> <span>${monster.money}</span></p>
+                        <p style="width: auto;"><img src="${source.fightLost.src}" /> <span>${lost}</span></p>
+                    </div>
+                </div>
+            `;
+            oList.append(row);
+        });
+    }
 }

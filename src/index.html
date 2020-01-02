@@ -26,10 +26,10 @@
             <ul id="dialog-list"></ul>
         </div>
         <div class="info">
-            <p class="item">血量: <span class="hp-value">600</span></p>
-            <p class="item">攻击: <span class="attack-value">10</span></p>
-            <p class="item">防御: <span class="defense-value">10</span></p>
-            <p class="item">金币: <span class="money-value">0</span></p>
+            <p class="item">血量: <span class="hp-value"></span></p>
+            <p class="item">攻击: <span class="attack-value"></span></p>
+            <p class="item">防御: <span class="defense-value"></span></p>
+            <p class="item">金币: <span class="money-value"></span></p>
         </div>
         <div id="control">
             <canvas class="control-btn" id="up" width="200" height="200"></canvas>
@@ -37,14 +37,41 @@
             <canvas class="control-btn" id="left" width="200" height="200"></canvas>
             <canvas class="control-btn" id="right" width="200" height="200"></canvas>
         </div>
-        <div id="menu-btn">菜单</div>
+        <div id="menu-btn"></div>
+        <div id="item-btn"></div>
+        <div id="monster-book"></div>
+        <ul id="key-list">
+            <li>
+                <span class="key" id="yellowkey"></span>
+                <span id="yellowkey-num">0</span>
+            </li>
+            <li>
+                <span class="key" id="bluekey"></span>
+                <span id="bluekey-num">0</span>
+            </li>
+            <li>
+                <span class="key" id="redkey"></span>
+                <span id="redkey-num">0</span>
+            </li>
+        </ul>
     </div>
+    <!-- 遮罩层 -->
+    <div id="mask"></div>
     <!-- 功能层 -->
     <div id="menu-wrap">
         <h1 class="title">菜单</h1>
         <button id="refresh">刷新</button>
         <button id="save">存档</button>
         <button id="load">读档</button>
+        <button id="close-menu">关闭</button>
+    </div>
+    <!-- 怪物图鉴 -->
+    <div id="monster-book-wrap">
+        <h1 class="title">怪物图鉴</h1>
+        <div class="border"></div>
+        <div class="line"></div>
+        <div id="monster-list"></div>
+        <div id="monster-book-close">关闭</div>
     </div>
 </body>
 </html>

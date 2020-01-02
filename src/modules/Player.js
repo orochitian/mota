@@ -8,12 +8,10 @@ let imgPos = 0;
 //  角色移动图片定位
 let xPos = 0;
 
-//  自定义事件
-let listener = {}
 
 class Player{
     constructor() {
-        this.index = 54;
+        this.index = 58;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -26,19 +24,23 @@ class Player{
         this.isMove = false;
         //  判断角色是否在转向
         this.turn = null;
-        this.hp = 400;
-        this.attack = 130;
+        this.hp = 1000;
+        this.attack = 10;
         this.defense = 100;
         this.money = 0;
         this.items = {
             yellowkey: 0,
-            bluekey: 1,
+            bluekey: 0,
             redkey: 0,
-            chuansong: 0,
+            monsterMenu: 0,
+            chuansong: 0
         }
     }
     set(option) {
         Object.assign(this, option);
+        if( option.items ) {
+            Object.assign(this.items, option.items);
+        }
         if( option.index ) {
             this.position = [grid[option.index][0], grid[option.index][1]];
         }
@@ -130,6 +132,7 @@ class Player{
             ctx.clearRect(this.position[0], this.position[1], 32, 32);
             this.render();
             this.moveTo = null;
+            this.turn = null;
         } else {
             this.index = indexCache;
             this.moveTo = direction;
@@ -161,6 +164,7 @@ class Player{
             if( grid && grid.type === 'event' ) {
                 game.touching = false;
                 this.isMove = false;
+                this.turn = null;
                 game.pause();
                 events[grid.name](game);
             }
@@ -185,15 +189,19 @@ class Player{
         game.clear(index);
         render.clearGrid(index);
         if( /^yellowkey|bluekey|redkey$/.test(item.name) ) {
-            this.items[item.name]++;
+            document.getElementById(item.name + '-num').innerHTML = ++this.items[item.name];
         } else if( item.name === 'hp' ) {
             this.hp += 50 * map.area;
+            render.status(this, 'hp');
         } else if( item.name === 'hplarge' ) {
             this.hp += 200 * map.area;
+            render.status(this, 'hp');
         } else if( item.name === 'attackgem' ) {
             this.attack += map.area;
+            render.status(this, 'attack');
         } else if( item.name === 'defencegem' ) {
             this.defense += map.area;
+            render.status(this, 'defense');
         }
     }
     getBuild(game, index) {
@@ -201,21 +209,21 @@ class Player{
         let name = current.name;
         if( name === 'yellowgate' ) {
             if( this.items.yellowkey > 0 ) {
-                this.items.yellowkey--;
+                document.getElementById('yellowkey-num').innerHTML = --this.items.yellowkey;
                 render.openGate(name, index, game);
             } else {
                 render.msg('没有黄色钥匙');
             }
         } else if( name === 'bluegate' ) {
             if( this.items.bluekey > 0 ) {
-                this.items.bluekey--;
+                document.getElementById('bluekey-num').innerHTML = --this.items.bluekey;
                 render.openGate(name, index, game);
             } else {
                 render.msg('没有蓝色钥匙');
             }
         } else if( name === 'redgate' ) {
             if( this.items.redkey > 0 ) {
-                this.items.redkey--;
+                document.getElementById('redkey-num').innerHTML = --this.items.redkey;
                 render.openGate(name, index, game);
             } else {
                 render.msg('没有红色钥匙');
@@ -273,6 +281,7 @@ class Player{
 
                 clearInterval(timmer);
                 render.fightEnd();
+                render.status(hero);
                 render.openGrid(index, () => {
                     game.clear(index);
                     if( next.open ) {
@@ -347,12 +356,13 @@ class Player{
         for( let i=0; i<area.length; i++ ) {
             if( !area[i] ) continue;
             //  如果是守卫
-            if( area[i].name === 'monster01' ) {
+            if( area[i].name === 'monster31' ) {
                 guard++;
-            } else if( area[i].name === 'monster03' ) {
+            } else if( area[i].name === 'monster27' ) {
                 console.log('收到200点暴击');
                 game.player.hp <= 200 ? game.player.hp = 1 : game.player.hp -= 200;
                 render.hurt(game);
+                render.status(this, 'hp');
                 return;
             }
         }
@@ -360,6 +370,7 @@ class Player{
             render.hurt(game);
             game.player.hp = Math.ceil(game.player.hp / 2);
             console.log('hp减少50%');
+            render.status(this, 'hp');
         }
     }
 }

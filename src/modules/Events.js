@@ -33,18 +33,18 @@ export default {
         await render.staticShow();
         await render.dialog(list);
         game.clear(92);
-        render.staticDraw(source.attack, game.player.index)
+        render.staticDraw(source.attack, game.player.index);
         await render.staticHide();
         render.black();
         game.mapIndex = 2;
-        game.player.set({index: 79, direct: 'up'});
+        game.player.set({index: 79, direct: 'up', hp: 400, attack: 10, defense: 10});
+        render.status(game.player);
         game.init();
         game.pause();
         await render.dialog([
             {icon: source.thief, content: '。。。。。'},
             {icon: source.thief, content: '喂。。。'},
-            {icon: source.thief, content: '喂。。。，醒醒'},
-            {icon: source.thief, content: '喂。。。，醒醒'},
+            {icon: source.thief, content: '喂。。。，醒醒'}
         ]);
         render.staticClear();
         await render.dialog([
@@ -63,8 +63,10 @@ export default {
             {icon: source.wise, content: '我可以给你怪物手册，它可以预测出当前楼层各类怪物对你的伤害'}
         ]);
         game.clear(43);
-        render.clearGrid(43);
-        render.msg('获得怪物图鉴');
-        game.start();
+        render.openGrid(43, () => {
+            game.player.items.monsterMenu = 1;
+            render.msg('获得怪物图鉴');
+            game.start();
+        });
     }
 }

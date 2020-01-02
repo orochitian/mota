@@ -4,6 +4,7 @@ const source = {
 
     //  闪电
     attack: require('../images/attack.png'),
+    fightLost: require('../images/fight_lost.png'),
 
     //  对战背景
     battle: require('../images/battleBg.jpg'),
@@ -30,6 +31,8 @@ const source = {
     redkey: require('../images/items/redkey.png'),
     luckycoins: require('../images/items/luckycoins.png'),
     chuansong: require('../images/items/chuansong.png'),
+    tiejian: require('../images/items/tiejian.png'),
+    tiedun: require('../images/items/tiedun.png'),
 
     //  NPC
     thief: require('../images/npc/thief.png'),

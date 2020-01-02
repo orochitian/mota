@@ -5,6 +5,16 @@ body {
     height: 100vh;
     user-select: none;
 }
+#mask{
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 99;
+}
 #game, #panel{
     /*opacity: 0;*/
 }
@@ -30,6 +40,7 @@ body {
     height: 100%;
     box-sizing: border-box;
     border: 12px solid transparent;
+    z-index: 999;
 }
 #dialog{
     visibility: hidden;
@@ -76,7 +87,7 @@ body {
     width: 100%;
     height: 100%;
     opacity: 0;
-    font-size: 12px;
+    font-size: 14px;
 }
 #dialog-list li:nth-of-type(1){
     opacity: 1;
@@ -89,7 +100,7 @@ body {
     line-height: 300px;
     font-size: 46px;
     text-align: center;
-    background-color: rgba(0, 0, 0, .7);
+    background-color: rgba(0, 0, 0, .8);
     color: orange;
     left: 12px;
     right: 12px;
@@ -148,7 +159,7 @@ body {
 #panel .info{
     padding: 5px 0;
     overflow: hidden;
-    border-bottom: 1px dashed #000;
+    font-size: 14px;
 }
 #panel .info p{
     margin: 0;
@@ -159,10 +170,19 @@ body {
     text-align: center;
     color: orangered;
 }
+
+#menu-btn{
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-image: url("./images/menu.png");
+    bottom: 20px;
+    right: 10px;
+}
 #menu-wrap{
     position: fixed;
     width: 100%;
-    left: 100%;
+    left: 100vw;
     top: 0;
     bottom: 0;
     background-color: #333;
@@ -170,12 +190,151 @@ body {
     z-index: 9999;
 }
 #menu-wrap .title{
-    color: #666;
+    color: orange;
     text-align: center;
+    letter-spacing: 2px;
 }
 #menu-wrap button{
     display: block;
     width: 80%;
     margin: 20px auto;
     line-height: 2em;
+}
+#item-btn{
+    position: absolute;
+    right: 20px;
+    top: 40px;
+    width: 32px;
+    height: 32px;
+    background-image: url("./images/item_btn.png");
+}
+#monster-book{
+    position: absolute;
+    left: 20px;
+    top: 40px;
+    width: 32px;
+    height: 32px;
+    background-image: url("./images/book.png");
+}
+#monster-book-wrap{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 100%;
+    background: url("./images/monster_book_bg.jpg") no-repeat center;
+    background-size: cover;
+    transition: .5s;
+    z-index: 9999;
+}
+#monster-book-wrap .title{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-align: center;
+    color: rgb(71, 31, 31);
+}
+#monster-book-wrap .border{
+    width: 80%;
+    margin: 0 auto;
+    height: 4px;
+    background: linear-gradient(to right, rgba(71, 31, 31, .2), rgba(71, 31, 31, .8), rgba(71, 31, 31, .2));
+}
+#monster-book-wrap .line{
+    border-top: 1px solid rgb(71, 31, 31);
+    margin-top: 10px;
+}
+#monster-book-close{
+    position: absolute;
+    width: 157px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: 20px;
+    background-image: url("./images/button_bg.png");
+}
+#monster-list{
+    position: absolute;
+    left: 20px;
+    right: 0;
+    top: 70px;
+    bottom: 70px;
+    overflow-y: scroll;
+    font-size: 14px;
+    color: rgb(71, 31, 31);
+}
+#monster-list .monster-row{
+    margin: 20px 0;
+}
+#monster-list .monster-row:after{
+    display: block;
+    content: '';
+    clear: both;
+}
+#monster-list .left{
+    float: left;
+    width: 80px;
+    text-align: center;
+}
+#monster-list .right{
+    float: right;
+}
+#monster-list .top{
+    color: rgb(51, 11, 11);
+}
+#monster-list .bottom{
+    margin-top: 5px;
+    color: green;
+}
+#monster-list .right p{
+    display: inline-block;
+    margin: 0;
+    width: 70px;
+    font-size: 12px;
+    padding-right: 4px;
+}
+#monster-list .right img{
+    width: 28px;
+    margin-right: 4px;
+}
+#monster-list .right img, #monster-list .right span{
+    vertical-align: middle;
+}
+#key-list{
+    position: absolute;
+    left: 10px;
+    top: 90px;
+    margin: 0;
+    padding: 0;
+}
+#key-list li {
+    list-style: none;
+    width: 100px;
+    margin-bottom: 10px;
+}
+#key-list li span{
+    display: inline-block;
+    font-size: 14px;
+    color: #333;
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+}
+#key-list .key{
+    width: 32px;
+}
+#yellowkey{
+    background-image: url("./images/items/yellowkey.png");
+}
+#bluekey{
+    background-image: url("./images/items/bluekey.png");
+}
+#redkey{
+    background-image: url("./images/items/redkey.png");
 }
