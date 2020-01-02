@@ -22,7 +22,7 @@ export default {
                 content: '欢迎来到魔塔，你是第一百位挑战者。你若能打败我所有的手下，我就与你一对一的决斗。现在你必须接受我的安排。'
             },
             {
-                icon: source.player,
+                icon: source.playerIcon,
                 content: '什么？'
             }
         ];

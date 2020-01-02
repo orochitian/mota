@@ -1,6 +1,7 @@
 const source = {
     //  角色
     player: require('../images/player.png'),
+    playerIcon: require('../images/player_icon.png'),
 
     //  闪电
     attack: require('../images/attack.png'),
