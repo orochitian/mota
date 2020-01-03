@@ -68,5 +68,12 @@ export default {
             render.msg('获得怪物图鉴');
             game.start();
         });
+    },
+    //  四层贤者对话
+    async '0401'(game) {
+        await render.dialog([
+            {icon: source.wise, content: '你想干嘛？'}
+        ]);
+        game.start();
     }
 }

@@ -35,6 +35,18 @@ window.builds = [
     {
         name: 'up',
     },
+    //  商店左
+    {
+        name: 'shopLeft',
+    },
+    //  商店中
+    {
+        name: 'shopCenter',
+    },
+    //  商店右
+    {
+        name: 'shopRight',
+    },
 ];
 
 window.builds = window.builds.map(item => {

@@ -11,7 +11,7 @@ let xPos = 0;
 
 class Player{
     constructor() {
-        this.index = 58;
+        this.index = 15;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -25,12 +25,12 @@ class Player{
         //  判断角色是否在转向
         this.turn = null;
         this.hp = 1000;
-        this.attack = 10;
+        this.attack = 110;
         this.defense = 100;
-        this.money = 0;
+        this.money = 10000;
         this.items = {
-            yellowkey: 0,
-            bluekey: 0,
+            yellowkey: 10,
+            bluekey: 10,
             redkey: 0,
             monsterMenu: 0,
             chuansong: 0
@@ -166,7 +166,7 @@ class Player{
                 this.isMove = false;
                 this.turn = null;
                 game.pause();
-                events[grid.name](game);
+                events[grid.event](game);
             }
             if( this.isMove ) {
                 this.startMove(this.direction, game);
@@ -209,25 +209,30 @@ class Player{
         let name = current.name;
         if( name === 'yellowgate' ) {
             if( this.items.yellowkey > 0 ) {
-                document.getElementById('yellowkey-num').innerHTML = --this.items.yellowkey;
+                this.items.yellowkey--;
+                render.keys(this, 'yellowkey');
                 render.openGate(name, index, game);
             } else {
                 render.msg('没有黄色钥匙');
             }
         } else if( name === 'bluegate' ) {
             if( this.items.bluekey > 0 ) {
-                document.getElementById('bluekey-num').innerHTML = --this.items.bluekey;
+                this.items.bluekey--;
+                render.keys(this, 'bluekey');
                 render.openGate(name, index, game);
             } else {
                 render.msg('没有蓝色钥匙');
             }
         } else if( name === 'redgate' ) {
             if( this.items.redkey > 0 ) {
-                document.getElementById('redkey-num').innerHTML = --this.items.redkey;
+                this.items.redkey--;
+                render.keys(this, 'redkey');
                 render.openGate(name, index, game);
             } else {
                 render.msg('没有红色钥匙');
             }
+        } else if( name === 'shopCenter' ) {
+            render.shop(game);
         } else if( name === 'down' || name === 'up' ) {
             render.changeScene(game, () => {
                 //  改变楼层

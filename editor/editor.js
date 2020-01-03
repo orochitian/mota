@@ -65,7 +65,7 @@ window.onload = () => {
             },
             //  添加事件
             eventOk() {
-                this.map.grids[this.eventIndex].name = this.eventID;
+                this.map.grids[this.eventIndex].event = this.eventID;
             },
             //  添加事件
             openOk() {

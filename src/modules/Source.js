@@ -21,6 +21,9 @@ const source = {
     redgate: require('../images/builds/redgate.png'),
     greengate: require('../images/builds/greengate.png'),
     rail: require('../images/builds/rail.png'),
+    shopLeft: require('../images/builds/shopLeft.png'),
+    shopCenter: require('../images/builds/shopCenter.png'),
+    shopRight: require('../images/builds/shopRight.png'),
 
     //  物品
     attackgem: require('../images/items/attackgem.png'),

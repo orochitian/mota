@@ -10,9 +10,11 @@ class Game{
         this.player = player;
         //  游戏运行状态，根据该状态判断游戏主循环是否继续
         this.running = true;
-        this.mapIndex = 3;
+        this.mapIndex = 4;
         this.maps = maps;
         this.requestID = null;
+        //  商店购买次数
+        this.shopTime = 1;
 
         //  用来标记触摸位置
         this.clientX = null;
@@ -37,6 +39,7 @@ class Game{
     //  游戏初始化
     init() {
         render.status(this.player);
+        render.keys(this.player);
         render.clearMap();
         render.map(this.getMap());
         this.player.render();

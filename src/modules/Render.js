@@ -236,6 +236,16 @@ export default {
             window.requestAnimationFrame(this.fram.bind(this, callback));
         }
     },
+    //  渲染钥匙
+    keys(player, filter) {
+        if( !filter ) {
+            document.getElementById('yellowkey-num').innerHTML = player.items.yellowkey;
+            document.getElementById('bluekey-num').innerHTML = player.items.bluekey;
+            document.getElementById('redkey-num').innerHTML = player.items.redkey;
+        } else {
+            document.getElementById(filter + '-num').innerHTML = player.items[filter];
+        }
+    },
     //  渲染角色数据显示
     status(player, filter) {
         if( !filter ) {
@@ -424,5 +434,60 @@ export default {
             `;
             oList.append(row);
         });
+    },
+    //  商店
+    shop(game) {
+        game.pause();
+        this.maskShow();
+        let shop = document.getElementById('shop');
+        let shopCost = document.getElementById('shop-cost');
+        let hpBtn = document.getElementById('add-hp');
+        let attackBtn = document.getElementById('add-attack');
+        let defenseBtn = document.getElementById('add-defense');
+
+        let price = 10 * game.shopTime * (game.shopTime-1) + 20;
+        let hpNum = game.shopTime * 100;
+        let attackNum = 2 * game.getMap().area;
+        let defenseNum = 4 * game.getMap().area;
+
+        shopCost.innerHTML = `花费${price}金币您可以：`;
+        hpBtn.innerHTML = `增加${hpNum}点生命`;
+        attackBtn.innerHTML = `增加${attackNum}点攻击`;
+        defenseBtn.innerHTML = `增加${defenseNum}点防御`;
+
+        let buy = () => {
+            game.shopTime++;
+            game.player.money -= price;
+            price = 10 * game.shopTime * (game.shopTime-1) + 20;
+            hpNum = game.shopTime*100;
+            shopCost.innerHTML = `花费${price}金币您可以：`;
+            hpBtn.innerHTML = `增加${hpNum}点生命`;
+            this.status(game.player);
+        }
+
+        hpBtn.onclick = function () {
+            if( game.player.money >= price ) {
+                game.player.hp += hpNum;
+                buy();
+            }
+        }
+        attackBtn.onclick = function () {
+            if( game.player.money >= price ) {
+                game.player.attack += attackNum;
+                buy();
+            }
+        }
+        defenseBtn.onclick = function () {
+            if( game.player.money >= price ) {
+                game.player.defense += defenseNum;
+                buy();
+            }
+        }
+        document.getElementById('close-shop').onclick = () => {
+            shop.style.visibility = 'hidden';
+            this.maskHide();
+            game.start();
+        }
+        shop.style.visibility = 'visible';
     }
 }
