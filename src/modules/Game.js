@@ -10,13 +10,13 @@ class Game{
         this.player = player;
         //  游戏运行状态，根据该状态判断游戏主循环是否继续
         this.running = true;
-        this.mapIndex = 4;
+        this.mapIndex = 1;
         this.maps = maps;
         this.requestID = null;
         //  商店购买次数
         this.shopTime = 1;
         //  通过的楼层
-        this.floors = [1,2,3];
+        this.floors = [];
 
         //  用来标记触摸位置
         this.clientX = null;
