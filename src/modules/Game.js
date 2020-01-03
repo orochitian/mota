@@ -15,6 +15,8 @@ class Game{
         this.requestID = null;
         //  商店购买次数
         this.shopTime = 1;
+        //  通过的楼层
+        this.floors = [1,2,3];
 
         //  用来标记触摸位置
         this.clientX = null;
@@ -41,8 +43,11 @@ class Game{
         render.status(this.player);
         render.keys(this.player);
         render.clearMap();
-        render.map(this.getMap());
+        render.map(this);
         this.player.render();
+        if( !this.floors.includes(this.mapIndex) ) {
+            this.floors.push(this.mapIndex);
+        }
         this.start();
     }
     //  开始

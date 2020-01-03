@@ -6,6 +6,14 @@ import render from './modules/Render'
 window.onload = () => {
     game.init();
 
+    //  开启传送
+    document.getElementById('chuansong-btn').onclick = () => {
+        render.chuansong(game);
+    }
+    //  关闭
+    document.getElementById('close-floor').onclick = () => {
+        document.getElementById('floor').style.visibility = 'hidden';
+    }
     //  打开菜单
     document.getElementById('menu-btn').onclick = () => {
         document.getElementById('menu-wrap').style.transform = 'translateX(-100vw)';

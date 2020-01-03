@@ -72,8 +72,10 @@ export default {
     //  四层贤者对话
     async '0401'(game) {
         await render.dialog([
-            {icon: source.wise, content: '你想干嘛？'}
+            {icon: source.wise, content: '有些门不能用钥匙打开，只有当你打败它的守卫后才会自动打开。'}
         ]);
-        game.start();
+        render.openGrid(9, () => {
+            game.start();
+        });
     }
 }

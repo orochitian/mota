@@ -35,6 +35,7 @@ window.onload = () => {
                 area: 1,
                 up: '',
                 down: '',
+                csPos: [],
                 grids: new Array(121),
             },
             //  当前选择的游戏对象
@@ -50,6 +51,21 @@ window.onload = () => {
             }
         },
         methods: {
+            getAround(index) {
+                return [index-1, index+1, index-11, index+11].filter(item => {
+                    if( item >= 0 && item <= 120 ) {
+                        if( index % 11 === 0 ) {
+                            return item % 11 === 10 ? false : true;
+                        } else if( index % 11 === 10 ) {
+                            return item % 11 === 0 ? false : true;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+            },
             //  选择
             check(item, group) {
                 if( item.active ) {
@@ -80,6 +96,15 @@ window.onload = () => {
                     this.$Modal.confirm({
                         title: '是否清除？',
                         onOk: () => {
+                            if( this.map.grids[index].name === 'up' || this.map.grids[index].name === 'down' ) {
+                                let around = this.getAround(index);
+                                for( let i=0; i<around.length; i++ ) {
+                                    let pos = this.map.csPos.indexOf(around[i]);
+                                    if( pos !== -1 ) {
+                                        this.map.csPos.splice(pos, 1);
+                                    }
+                                }
+                            }
                             this.map.grids[index] = null;
                             grid.style.background = 'none';
                         }
@@ -93,6 +118,12 @@ window.onload = () => {
                     }
                     if( this.current.type === 'monster' && this.openGate ) {
                         this.openModal = true;
+                    }
+                    if( this.current.name === 'up' || this.current.name === 'down' ) {
+                        let around = this.getAround(index);
+                        for( let i=0; i<around.length; i++ ) {
+                            this.map.csPos.push(around[i]);
+                        }
                     }
                     grid.style.background = `url(${this.current.src}) no-repeat`;
                     this.map.grids[index] = { type: this.current.type, name: this.current.name };

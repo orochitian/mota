@@ -22,7 +22,9 @@ let oStatic = document.getElementById('static');
 
 export default {
     //  渲染地图
-    map(map) {
+    map(game) {
+        let map = game.getMap();
+        document.getElementById('floor-num').innerHTML = `第${game.mapIndex}层`;
         for( let i=0; i<map.grids.length; i++ ) {
             if( !map.grids[i] || map.grids[i].type === 'event' ) {
                 continue;
@@ -489,5 +491,44 @@ export default {
             game.start();
         }
         shop.style.visibility = 'visible';
+    },
+    //  传送
+    chuansong(game) {
+        if( !game.player.items.chuansong ) {
+            this.msg('没有传送权杖');
+        } else {
+            if( game.getMap().csPos.includes(game.player.index) ) {
+                document.getElementById('floor-list').innerHTML = '';
+                for( let i=0; i<game.floors.length; i++ ) {
+                    let li = document.createElement('li');
+                    li.innerHTML = game.floors[i];
+                    if( game.floors[i] === game.mapIndex ) {
+                        li.className = 'active';
+                    }
+                    document.getElementById('floor-list').append(li);
+                    li.onclick = ev => {
+                        if( game.floors[i] === game.mapIndex ) {
+                            return false;
+                        }
+                        document.getElementById('floor').style.visibility = 'hidden';
+                        this.changeScene(game, () => {
+                            let name = '';
+                            if( game.mapIndex < game.floors[i] ) {
+                                name = 'up';
+                            } else {
+                                name = 'down';
+                            }
+                            game.mapIndex = game.floors[i];
+                            game.player.set({index: game.getMap()[name]});
+                            //  在场景过度到一半的时候重新渲染新地图，同时暂停游戏
+                            game.init();
+                        });
+                    }
+                }
+                document.getElementById('floor').style.visibility = 'visible';
+            } else {
+                this.msg('只能在楼梯旁使用');
+            }
+        }
     }
 }

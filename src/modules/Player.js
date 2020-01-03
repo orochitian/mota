@@ -11,7 +11,7 @@ let xPos = 0;
 
 class Player{
     constructor() {
-        this.index = 15;
+        this.index = 109;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -33,7 +33,7 @@ class Player{
             bluekey: 10,
             redkey: 0,
             monsterMenu: 0,
-            chuansong: 0
+            chuansong: 1
         }
     }
     set(option) {
@@ -202,6 +202,9 @@ class Player{
         } else if( item.name === 'defencegem' ) {
             this.defense += map.area;
             render.status(this, 'defense');
+        } else if( item.name === 'chuansong' ) {
+            this.items.chuansong = 1;
+            render.msg('获得传送权杖');
         }
     }
     getBuild(game, index) {
