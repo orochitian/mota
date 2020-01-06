@@ -37,7 +37,7 @@ export default {
         await render.staticHide();
         render.black();
         game.mapIndex = 2;
-        game.player.set({index: 79, direct: 'up', hp: 400, attack: 10, defense: 10});
+        game.player.set({index: 79, direct: 'up', hp: 400, attack: 200, defense: 200});
         render.status(game.player);
         game.init();
         game.pause();
