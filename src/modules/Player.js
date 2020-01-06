@@ -11,7 +11,7 @@ let xPos = 0;
 
 class Player{
     constructor() {
-        this.index = 115;
+        this.index = 1;
         this.position = [grid[this.index][0], grid[this.index][1]];
         //  角色当前移动方向
         this.direction = null;
@@ -25,15 +25,16 @@ class Player{
         //  判断角色是否在转向
         this.turn = null;
         this.hp = 1000;
-        this.attack = 110;
-        this.defense = 100;
+        this.attack = 210;
+        this.defense = 200;
         this.money = 10000;
         this.items = {
             yellowkey: 10,
             bluekey: 10,
             redkey: 0,
             monsterMenu: 0,
-            chuansong: 1
+            chuansong: 1,
+            notepad: 0
         }
     }
     set(option) {
@@ -205,6 +206,49 @@ class Player{
         } else if( item.name === 'chuansong' ) {
             this.items.chuansong = 1;
             render.msg('获得传送权杖');
+        } else if( item.name === 'notepad' ) {
+            this.items.notepad = 1;
+            render.msg('获得记事本');
+        } else if( item.name === 'tiejian' ) {
+            render.msg('获得铁剑，攻击力+10');
+            this.attack += 10;
+            render.status(this, 'attack');
+        } else if( item.name === 'tiedun' ) {
+            render.msg('获得铁盾，防御力+10');
+            this.defense += 10;
+            render.status(this, 'defense');
+        } else if( item.name === 'yinjian' ) {
+            render.msg('获得银剑，攻击力+20');
+            this.attack += 20;
+            render.status(this, 'attack');
+        } else if( item.name === 'yindun' ) {
+            render.msg('获得银盾，防御力+20');
+            this.defense += 20;
+            render.status(this, 'defense');
+        } else if( item.name === 'qishijian' ) {
+            render.msg('获得骑士剑，攻击力+40');
+            this.attack += 40;
+            render.status(this, 'attack');
+        } else if( item.name === 'qishidun' ) {
+            render.msg('获得骑士盾，防御力+40');
+            this.defense += 40;
+            render.status(this, 'defense');
+        } else if( item.name === 'shengjian' ) {
+            render.msg('获得圣剑，攻击力+50');
+            this.attack += 50;
+            render.status(this, 'attack');
+        } else if( item.name === 'shengdun' ) {
+            render.msg('获得圣盾，防御力+50');
+            this.defense += 50;
+            render.status(this, 'defense');
+        } else if( item.name === 'shenshengjian' ) {
+            render.msg('获得神圣剑，攻击力+100');
+            this.attack += 100;
+            render.status(this, 'attack');
+        } else if( item.name === 'shenshengdun' ) {
+            render.msg('获得神圣盾，防御力+100');
+            this.defense += 100;
+            render.status(this, 'defense');
         }
     }
     getBuild(game, index) {
@@ -236,6 +280,12 @@ class Player{
             }
         } else if( name === 'shopCenter' ) {
             render.shop(game);
+        } else if( name === 'airWall' ) {
+            game.pause();
+            render.openGrid(index, () => {
+                game.start();
+            });
+            game.clear(index);
         } else if( name === 'down' || name === 'up' ) {
             render.changeScene(game, () => {
                 //  改变楼层
@@ -290,8 +340,15 @@ class Player{
                 clearInterval(timmer);
                 render.fightEnd();
                 render.status(hero);
+                if( next.area ){
+                    index = next.area;
+                }
                 render.openGrid(index, () => {
-                    game.clear(index);
+                    if( next.area ) {
+                        next.area.forEach(item => game.clear(item));
+                    } else {
+                        game.clear(index);
+                    }
                     if( next.open ) {
                         let killed = true;
                         for( let i=0, monsters = next.open.monsters; i<monsters.length; i++  ) {
@@ -337,6 +394,9 @@ class Player{
         } else if( grid.type === 'event' ) {
             this.canMove = true;
         } else if( grid.name === 'wall' ) {
+            this.canMove = false;
+        }  else if( grid.name === 'airWall' ) {
+            this.getBuild(game, index);
             this.canMove = false;
         } else if( grid.type === 'npc' ) {
             this.canMove = false;

@@ -16,6 +16,6 @@ window.npcs = [
 window.npcs = window.npcs.map(npc => {
     npc.type = 'npc';
     npc.active = false;
-    npc.src = './images/npc/' + npc.name + '.png'
+    npc.src = './images/npc/' + npc.name + '.png';
     return npc;
 });

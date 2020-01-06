@@ -119,9 +119,9 @@ body {
 #message{
     opacity: 0;
     position: absolute;
-    height: 300px;
-    line-height: 300px;
-    font-size: 46px;
+    height: 200px;
+    line-height: 200px;
+    font-size: 40px;
     text-align: center;
     background-color: rgba(0, 0, 0, .8);
     color: orange;

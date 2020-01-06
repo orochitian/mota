@@ -14,6 +14,7 @@ const source = {
 
     //  建筑
     wall: require('../images/builds/wall.png'),
+    airWall: require('../images/builds/wall.png'),
     up: require('../images/builds/up.png'),
     down: require('../images/builds/down.png'),
     yellowgate: require('../images/builds/yellowgate.png'),
@@ -37,6 +38,15 @@ const source = {
     chuansong: require('../images/items/chuansong.png'),
     tiejian: require('../images/items/tiejian.png'),
     tiedun: require('../images/items/tiedun.png'),
+    yinjian: require('../images/items/yinjian.png'),
+    yindun: require('../images/items/yindun.png'),
+    qishijian: require('../images/items/qishijian.png'),
+    qishidun: require('../images/items/qishidun.png'),
+    shengjian: require('../images/items/shengjian.png'),
+    shengdun: require('../images/items/shengdun.png'),
+    shenshengjian: require('../images/items/shenshengjian.png'),
+    shenshengdun: require('../images/items/shenshengdun.png'),
+    notepad: require('../images/items/notepad.png'),
 
     //  NPC
     thief: require('../images/npc/thief.png'),

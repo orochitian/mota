@@ -126,7 +126,19 @@ window.onload = () => {
                         }
                     }
                     grid.style.background = `url(${this.current.src}) no-repeat`;
-                    this.map.grids[index] = { type: this.current.type, name: this.current.name };
+                    if( this.current.big ) {
+                        let area = [index-23, index-22, index-21, index-12, index-11, index-10, index-1, index, index+1];
+                        area.forEach(item => {
+                            if( item === index ) {
+                                this.map.grids[item] = { type: this.current.type, name: this.current.name, big: true, area };
+                            } else {
+                                document.getElementsByClassName('grid')[item].style.background = `url(${this.current.src}) no-repeat`;
+                                this.map.grids[item] = { type: this.current.type, name: this.current.name, area };
+                            }
+                        });
+                    } else {
+                        this.map.grids[index] = { type: this.current.type, name: this.current.name };
+                    }
                 }
             },
             //  获取地图

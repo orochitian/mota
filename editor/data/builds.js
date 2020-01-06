@@ -7,6 +7,10 @@ window.builds = [
     {
         name: 'airWall',
     },
+    //  熔岩
+    {
+        name: 'lava',
+    },
     //  黄门
     {
         name: 'yellowgate',
@@ -52,6 +56,6 @@ window.builds = [
 window.builds = window.builds.map(item => {
     item.type = 'build';
     item.active = false;
-    item.src = './images/builds/' + item.name + '.png'
+    item.src = './images/builds/' + item.name + '.png';
     return item;
 });

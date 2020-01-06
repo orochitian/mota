@@ -14,7 +14,8 @@ let messageAnimation = oMessage.animate([
     {opacity: 1},
     {opacity: 0}
 ], {
-    duration: 1000
+    duration: 1000,
+    ease: 'easing-out'
 });
 messageAnimation.cancel();
 
@@ -28,6 +29,12 @@ export default {
         for( let i=0; i<map.grids.length; i++ ) {
             if( !map.grids[i] || map.grids[i].type === 'event' ) {
                 continue;
+            } else if( map.grids[i].area ) {
+                if( map.grids[i].big ) {
+                    let x = grid[i-23][0];
+                    let y = grid[i-23][1];
+                    ctx.drawImage(source[map.grids[i].name], 0, 0, 96, 96, x, y, 96, 96);
+                }
             } else {
                 this.draw(source[map.grids[i].name], i);
             }

@@ -47,6 +47,79 @@ module.exports = {
         money: 8,
         img: 'monster06'
     },
+    monster07: {
+        name: '初级卫兵',
+        hp: 50,
+        attack: 48,
+        defense: 22,
+        money: 12,
+        img: 'monster07'
+    },
+    monster08: {
+        name: '骷髅队长',
+        hp: 100,
+        attack: 65,
+        defense: 15,
+        money: 30,
+        img: 'monster08'
+    },
+    monster09: {
+        name: '大史莱姆',
+        hp: 130,
+        attack: 60,
+        defense: 3,
+        money: 8,
+        img: 'monster09'
+    },
+    monster10: {
+        name: '大蝙蝠',
+        hp: 60,
+        attack: 100,
+        defense: 8,
+        money: 12,
+        img: 'monster10'
+    },
+    monster11: {
+        name: '高级法师',
+        hp: 100,
+        attack: 95,
+        defense: 30,
+        money: 18,
+        img: 'monster11'
+    },
+    monster12: {
+        name: '兽人',
+        hp: 260,
+        attack: 85,
+        defense: 5,
+        money: 22,
+        img: 'monster12'
+    },
+    monster13: {
+        name: '兽人武士',
+        hp: 320,
+        attack: 120,
+        defense: 15,
+        money: 30,
+        img: 'monster13'
+    },
+    monster14: {
+        name: '石头人',
+        hp: 20,
+        attack: 100,
+        defense: 68,
+        money: 28,
+        img: 'monster14'
+    },
+    monster15: {
+        name: '大乌贼',
+        boss: true,
+        hp: 1200,
+        attack: 180,
+        defense: 20,
+        money: 100,
+        img: 'monster15'
+    },
     monster21: {
         name: '中级卫兵',
         hp: 100,
