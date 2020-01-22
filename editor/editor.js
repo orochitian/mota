@@ -85,9 +85,9 @@ window.onload = () => {
             },
             //  添加事件
             openOk() {
-                this.open.gates = this.open.gates.split(' ').map(item => parseInt(item));
-                this.open.monsters = this.open.monsters.split(' ').map(item => parseInt(item));
-                this.map.grids[this.eventIndex].open = this.open;
+                let gates = this.open.gates.split(' ').map(item => parseInt(item));
+                let monsters = this.open.monsters.split(' ').map(item => parseInt(item));
+                this.map.grids[this.eventIndex].open = Object.assign({}, this.open, {gates, monsters});
             },
             //  放置
             place(ev, index) {

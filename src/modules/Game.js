@@ -61,7 +61,12 @@ class Game{
     }
     //  删除地图中的格子
     clear(index) {
-        this.getMap().grids[index] = null;
+        if( typeof index === 'number') {
+            this.getMap().grids[index] = null;
+        } else {
+            let map = this.getMap();
+            index.forEach(i => map.grids[i] = null);
+        }
     }
     //  获取指定地图信息
     getMap(index = this.mapIndex) {

@@ -65,7 +65,7 @@ body {
     border: 12px solid transparent;
     z-index: 999;
 }
-#dialog{
+#dialog, #confirm{
     visibility: hidden;
     position: absolute;
     box-sizing: border-box;
@@ -78,6 +78,28 @@ body {
     color: #ddd;
     letter-spacing: 1px;
     z-index: 999;
+}
+#confirm-icon{
+    margin: 10px 20px;
+}
+#confirm-content{
+    padding: 0 20px;
+}
+#confirm .btns{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    text-align: center;
+}
+#confirm .btn{
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: url("./images/button_bg.png") no-repeat center;
+    background-size: 100% 100%;
 }
 #dialog:after{
     content: '点击继续...';
@@ -127,8 +149,7 @@ body {
     color: orange;
     left: 12px;
     right: 12px;
-    top: 0;
-    bottom: 0;
+    bottom: 12px;
     margin: auto;
 }
 

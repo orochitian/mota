@@ -62,20 +62,125 @@ export default {
         await render.dialog([
             {icon: source.wise, content: '我可以给你怪物手册，它可以预测出当前楼层各类怪物对你的伤害'}
         ]);
-        game.clear(43);
-        render.openGrid(43, () => {
-            game.player.items.monsterMenu = 1;
-            render.msg('获得怪物图鉴');
-            game.start();
-        });
+        await render.openGrid(43);
+        game.player.items.monsterMenu = 1;
+        render.msg('获得怪物图鉴');
     },
     //  四层贤者对话
     async '0401'(game) {
         await render.dialog([
             {icon: source.wise, content: '有些门不能用钥匙打开，只有当你打败它的守卫后才会自动打开。'}
         ]);
-        render.openGrid(9, () => {
-            game.start();
+        render.openGrid(9);
+    },
+    //  6层贤者对话
+    async '0601'(game) {
+        await render.dialog([
+            {icon: source.wise, content: '你购买了礼物后再与商人对话，他会告诉你一些重要的消息。'}
+        ]);
+        render.openGrid(80);
+    },
+    //  6层商人对话
+    async '0602'(game) {
+        render.buy({
+            game,
+            index: 40,
+            content: '我有一把蓝钥匙，你出50个金币就卖给你。',
+            price: 50,
+            name: 'bluekey',
+            num: 1
         });
+    },
+    //  7层商人对话
+    async '0701'(game) {
+        render.buy({
+            game,
+            index: 5,
+            content: '我有五把黄钥匙，你出50个金币就卖给你。',
+            price: 50,
+            name: 'yellowkey',
+            num: 5
+        });
+    },
+    // 10层遇到BOSS对话
+    async '1001'(game) {
+        game.pause();
+        //  删除当前位置事件
+        game.clear(49);
+        //  对话
+        await render.dialog([
+            {icon: source.monster08, content: '哈哈哈，你是如此的幸运能安全到达这里，但现在好运离你而去了，你中埋伏了，弟兄们给我上。'}
+        ]);
+        //  队长移动
+        await render.autoMove(game, 38, 5);
+
+        //  开门和墙，由于openGate和openGrid执行完成后默认会执行game.start()所以这里要手动暂停一下
+        await render.openGate('greengate', [36, 40], game);
+        game.pause();
+
+        await render.openGrid(game, [59, 61]);
+        game.pause();
+
+        let paths = [ [34, 60], [22, 59], [23, 48], [24, 37], [42, 38], [30, 61], [31, 50], [32, 39] ];
+        for( let i=0; i<paths.length; i++ ) {
+            await render.autoMove(game, paths[i][0], paths[i][1]);
+        }
+        [27, 36, 40, 71].forEach(item => {
+            game.getMap().grids[item] = {type: 'build', name: 'greengate'};
+            render.draw(source.greengate, item);
+        });
+        game.start();
+    },
+    async '1002'(game) {
+        game.pause();
+        //  删除当前位置事件
+        game.clear(16);
+        //  对话
+        await render.dialog([
+            {icon: source.monster08, content: '你怎么可能杀出重围？我是绝对不会让你通过的，来吧，我要和你决斗！奥利给！'}
+        ]);
+        game.start();
+    },
+    async '1003'(game) {
+        game.pause();
+        //  对话
+        await render.dialog([
+            {icon: source.monster08, content: '不，这是不可能的，你怎么会打败我！你别太得意，后面还有许多强大的对手和机关存在，你稍有疏忽就必死无疑。'}
+        ]);
+        let map = [
+            {type: 'item', name: 'attackgem', index: 22},
+            {type: 'item', name: 'attackgem', index: 23},
+            {type: 'item', name: 'attackgem', index: 24},
+            {type: 'item', name: 'defencegem', index: 30},
+            {type: 'item', name: 'defencegem', index: 31},
+            {type: 'item', name: 'defencegem', index: 32},
+            {type: 'item', name: 'hplarge', index: 33},
+            {type: 'item', name: 'hplarge', index: 34},
+            {type: 'item', name: 'hplarge', index: 35},
+            {type: 'item', name: 'yellowkey', index: 41},
+            {type: 'item', name: 'yellowkey', index: 42},
+            {type: 'item', name: 'yellowkey', index: 43},
+        ];
+
+        map.forEach(item => {
+            render.draw(source[item.name], item.index);
+            game.getMap().grids[item.index] = {type: item.type, name: item.name};
+        });
+        game.getMap().grids[93] = {type: 'event', event: '1004'};
+        game.getMap().grids[115] = {type: 'build', name: 'up'};
+        render.draw(source.up, 115);
+        await render.openGate('greengate', [36, 40, 71], game);
+    },
+    async '1004'(game) {
+        game.pause();
+        render.draw(source.thief, 104);
+        //  对话
+        await render.dialog([
+            {icon: source.thief, content: '嘿嘿，我们又见面了，非常感谢你打败了此区域的头目。'},
+            {icon: source.thief, content: '我正苦恼于如何到更高的楼层，现在我终于可以上去了。我听说银盾在11楼，银剑在17楼，这消息不知道对你是否有用。'},
+        ]);
+        render.clearGrid(104);
+        game.clear(93);
+        game.start();
     }
 }

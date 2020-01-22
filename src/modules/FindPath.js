@@ -1,11 +1,11 @@
 //  获取坐标n周围可扩展路径
-function getAround(n, maps) {
+function getAround(n, maps, ignore) {
     return [n - 1, n - 11, n + 1, n + 11].filter(num => {
         //  防止最左减1后变最右
-        if( (n - 1) % 11 === 10 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 10;
+        if( (n - 1) % 11 === 10 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 10 && num !== ignore;
         //  防止最右加1后变最左
-        if( (n + 1) % 11 === 0 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 0;
-        return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event');
+        if( (n + 1) % 11 === 0 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 0 && num !== ignore;
+        return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num !== ignore;
     });
 }
 
@@ -35,7 +35,7 @@ function getPath(relation, end) {
 }
 
 //  广度优先搜索
-function bfs(start, end, map) {
+function bfs(start, end, map, ignore) {
     //  未检测或待检测列表
     let openList = [];
     //  已检测列表
@@ -61,7 +61,7 @@ function bfs(start, end, map) {
         closeList.push(g);
 
         //  获取本次检测点周围可覆盖点（相当于子节点）
-        let around = getAround(g, map);
+        let around = getAround(g, map, ignore);
 
         //  循环所有子节点
         for (let i=0; i<around.length; i++) {
@@ -83,8 +83,8 @@ function bfs(start, end, map) {
     return relation;
 }
 
-export default function(start, end, map) {
-    let relation = bfs(start, end, map);
+export default function(start, end, map, ignore) {
+    let relation = bfs(start, end, map, ignore);
     let path = getPath(relation, end);
     path.shift();
     return path;

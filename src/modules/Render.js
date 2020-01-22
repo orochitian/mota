@@ -69,7 +69,7 @@ export default {
         let obj = game.getGrid(start);
         if( !obj ) return;
 
-        let path = findPath(start, end, map.grids);
+        let path = findPath(start, end, map.grids, game.player.index);
         let begin = start;
 
         return new Promise(resolve => {
@@ -134,49 +134,82 @@ export default {
         ctx.clearRect(grid[index][0], grid[index][1], 32, 32);
     },
     //  清除格子，从上到下消除
-    openGrid(index, callback) {
-        if( typeof index === 'number' ) {
-            this.tween(step => {
-                ctx.clearRect(grid[index][0], grid[index][1], 32, 8 * step);
-            }, callback);
-        } else {
-            this.tween(step => {
-                for( let i=0; i<index.length; i++ ) {
-                    ctx.clearRect(grid[index[i]][0], grid[index[i]][1], 32, 8 * step);
-                }
-            }, callback);
-        }
+    openGrid(game, index) {
+        return new Promise(resolve => {
+            game.pause();
+            if( typeof index === 'number' ) {
+                this.tween(step => {
+                    game.clear(index);
+                    ctx.clearRect(grid[index][0], grid[index][1], 32, 8 * step);
+                }, () => {
+                    game.start();
+                    resolve();
+                });
+            } else {
+                this.tween(step => {
+                    for( let i=0; i<index.length; i++ ) {
+                        game.clear(index[i]);
+                        ctx.clearRect(grid[index[i]][0], grid[index[i]][1], 32, 8 * step);
+                    }
+                }, () => {
+                    game.start();
+                    resolve();
+                });
+            }
+        });
     },
     //  开门
     openGate(name, index, game) {
-        game.pause();
-        if( typeof index === 'number' ) {
-            this.tween(step => {
-                this.clearGrid(index);
-                ctx.drawImage(source[name], 0, step*32, 32, 32, grid[index][0], grid[index][1], 32, 32);
-            }, () => {
-                game.clear(index);
-                game.start();
-                game.player.keepMove(game);
-            });
-        } else {
-            this.tween(step => {
-                for( let i=0; i<index.length; i++ ) {
-                    this.clearGrid(index[i]);
-                    ctx.drawImage(source[name], 0, step*32, 32, 32, grid[index[i]][0], grid[index[i]][1], 32, 32);
-                }
-            }, () => {
-                game.clear(index);
-                game.start();
-                game.player.keepMove(game);
-            });
-        }
+        return new Promise(resolve => {
+            game.pause();
+            if( typeof index === 'number' ) {
+                this.tween(step => {
+                    this.clearGrid(index);
+                    ctx.drawImage(source[name], 0, step*32, 32, 32, grid[index][0], grid[index][1], 32, 32);
+                }, () => {
+                    game.clear(index);
+                    game.start();
+                    game.player.keepMove(game);
+                    resolve();
+                });
+            } else {
+                this.tween(step => {
+                    for( let i=0; i<index.length; i++ ) {
+                        this.clearGrid(index[i]);
+                        ctx.drawImage(source[name], 0, step*32, 32, 32, grid[index[i]][0], grid[index[i]][1], 32, 32);
+                    }
+                }, () => {
+                    game.clear(index);
+                    game.start();
+                    game.player.keepMove(game);
+                    resolve();
+                });
+            }
+        });
     },
     //  消息
     msg(msg) {
         oMessage.innerText = msg;
         messageAnimation.cancel();
         messageAnimation.play();
+    },
+    //  确认消息
+    confirm(option) {
+        let {icon, content, ok, cancel} = option;
+        document.getElementById('confirm-icon').src = icon.src;
+        document.getElementById('confirm-content').innerHTML = content;
+        let oConfirm = document.getElementById('confirm');
+
+        oConfirm.style.visibility = 'visible';
+        document.getElementById('confirm-ok').onclick = () => {
+            oConfirm.style.visibility = 'hidden';
+            ok();
+        };
+        document.getElementById('confirm-cancel').onclick = () => {
+            oConfirm.style.visibility = 'hidden';
+            cancel();
+        }
+
     },
     //  对话
     dialog(list) {
@@ -442,6 +475,34 @@ export default {
                 </div>
             `;
             oList.append(row);
+        });
+    },
+    //  商人
+    buy(option) {
+        let {game, index, content, price, name, num} = option;
+        game.pause();
+        this.confirm({
+            icon: source.business,
+            content,
+            ok: () => {
+                if( game.player.money >= price ) {
+                    game.player.money -= price;
+                    if( name.includes('key') ) {
+                        game.player.items[name] += num;
+                        this.keys(game.player, name);
+                    } else {
+                        game.player[name] += num;
+                    }
+                    this.status(game.player);
+                    this.openGrid(game, index);
+                } else {
+                    this.msg('穷就不要出来！');
+                    game.start();
+                }
+            },
+            cancel() {
+                game.start();
+            }
         });
     },
     //  商店

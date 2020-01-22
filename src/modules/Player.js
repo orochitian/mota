@@ -27,13 +27,13 @@ class Player{
         this.hp = 1000;
         this.attack = 210;
         this.defense = 200;
-        this.money = 10000;
+        this.money = 100;
         this.items = {
             yellowkey: 10,
             bluekey: 10,
-            redkey: 0,
+            redkey: 10,
             monsterMenu: 0,
-            chuansong: 1,
+            chuansong: 0,
             notepad: 0
         }
     }
@@ -281,11 +281,7 @@ class Player{
         } else if( name === 'shopCenter' ) {
             render.shop(game);
         } else if( name === 'airWall' ) {
-            game.pause();
-            render.openGrid(index, () => {
-                game.start();
-            });
-            game.clear(index);
+            render.openGrid(game, index);
         } else if( name === 'down' || name === 'up' ) {
             render.changeScene(game, () => {
                 //  改变楼层
@@ -343,7 +339,7 @@ class Player{
                 if( next.area ){
                     index = next.area;
                 }
-                render.openGrid(index, () => {
+                render.openGrid(game, index).then(() => {
                     if( next.area ) {
                         next.area.forEach(item => game.clear(item));
                     } else {
@@ -362,9 +358,7 @@ class Player{
                                 game.clear(i);
                             });
                             if( next.open.type === 'rail' ) {
-                                render.openGrid(next.open.gates, () => {
-                                    game.start();
-                                });
+                                render.openGrid(game, next.open.gates);
                             } else {
                                 render.openGate(next.open.type, next.open.gates, game);
                             }
