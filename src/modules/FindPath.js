@@ -2,9 +2,9 @@
 function getAround(n, maps, ignore) {
     return [n - 1, n - 11, n + 1, n + 11].filter(num => {
         //  防止最左减1后变最右
-        if( (n - 1) % 11 === 10 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 10 && num !== ignore;
+        if ((n - 1) % 11 === 10) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 10 && num !== ignore;
         //  防止最右加1后变最左
-        if( (n + 1) % 11 === 0 ) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 0 && num !== ignore;
+        if ((n + 1) % 11 === 0) return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num % 11 !== 0 && num !== ignore;
         return num >= 0 && num < 121 && (maps[num] === null || maps[num].type === 'event') && num !== ignore;
     });
 }
@@ -47,7 +47,7 @@ function bfs(start, end, map, ignore) {
 
     //  第一次执行搜索，向待检测队列和关系队列压入起始点
     openList.push(start);
-    relation.push({value: start});
+    relation.push({ value: start });
 
     //  递归检测
     function loop() {
@@ -64,7 +64,7 @@ function bfs(start, end, map, ignore) {
         let around = getAround(g, map, ignore);
 
         //  循环所有子节点
-        for (let i=0; i<around.length; i++) {
+        for (let i = 0; i < around.length; i++) {
             //  如果当前检测点是目标点，结束递归即可。
             if (g === end) {
                 return;
@@ -73,7 +73,7 @@ function bfs(start, end, map, ignore) {
                 //  如果子节点不存在于待检测队列和已检测队列中，将子节点压入待检测队列。通过递归检测，逐层扫描，直到全部路径扫描完。
                 openList.push(around[i]);
                 //  将扫描过的节点全部存入关系队列中，并标记每个节点的父节点。在需要的时候，可以通过关系队列中逐级找到目标点到起点的路径顺序。
-                relation.push({value: around[i], parent: g});
+                relation.push({ value: around[i], parent: g });
             }
         }
         loop();

@@ -62,7 +62,7 @@ export default {
         await render.dialog([
             {icon: source.wise, content: '我可以给你怪物手册，它可以预测出当前楼层各类怪物对你的伤害'}
         ]);
-        await render.openGrid(43);
+        await render.openGrid(game, 43);
         game.player.items.monsterMenu = 1;
         render.msg('获得怪物图鉴');
     },
@@ -71,14 +71,14 @@ export default {
         await render.dialog([
             {icon: source.wise, content: '有些门不能用钥匙打开，只有当你打败它的守卫后才会自动打开。'}
         ]);
-        render.openGrid(9);
+        render.openGrid(game, 9);
     },
     //  6层贤者对话
     async '0601'(game) {
         await render.dialog([
             {icon: source.wise, content: '你购买了礼物后再与商人对话，他会告诉你一些重要的消息。'}
         ]);
-        render.openGrid(80);
+        render.openGrid(game, 80);
     },
     //  6层商人对话
     async '0602'(game) {
